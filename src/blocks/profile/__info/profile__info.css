@@ -1,0 +1,18 @@
+.profile__info {
+  margin: 0 165px 0 30px;
+  display: grid;
+  align-items: baseline;
+  gap: 16px 0px;
+  grid-auto-flow: column;
+}
+@media screen and (max-width: 900px) {
+  .profile__info {
+    margin: 0 0 0 30px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .profile__info {
+    gap: 14px 0;
+    margin: 36px auto 30px;
+  }
+}

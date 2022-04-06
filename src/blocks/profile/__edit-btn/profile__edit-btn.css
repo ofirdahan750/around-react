@@ -1,0 +1,17 @@
+.profile__edit-btn {
+  border: 1px rgba(255, 255, 255, 1) solid;
+  padding: 7px;
+  grid-area: 1 / 2 / 2 / 3;
+  margin: 0 0 0 18px;
+}
+@media screen and (max-width: 768px) {
+  .profile__edit-btn {
+    padding: 5.25px;
+    margin: 0 0 0 10px;
+  }
+}
+
+.profile__edit-btn:hover {
+  opacity: 0.6;
+  animation: jello-diagonal-2 0.7s both;
+}

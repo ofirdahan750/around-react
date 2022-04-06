@@ -1,0 +1,15 @@
+.profile__add-btn {
+  padding: 14px 64px;
+  border: 2px solid #ffffff;
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+@media screen and (max-width: 768px) {
+  .profile__add-btn {
+    padding: 17px 128px;
+  }
+}
+.profile__add-btn:hover {
+  opacity: 0.6;
+  animation: jello-diagonal-2 0.7s both;
+}

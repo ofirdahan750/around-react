@@ -1,13 +1,83 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/* Vendor */
+@import url("./vendor/normalize.css");
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+/* Font Rule */
+@import url("./fonts/inter/inter.css");
+
+/* Keyframe */
+@import url("./keyframe/keyframe.css");
+
+/* Page */
+@import url("./blocks/page/page.css");
+
+/* Root */
+@import url("./blocks/root/root.css");
+
+/* button modifier */
+@import url("./blocks/button-modifier/button-modifier.css");
+
+/* Header */
+@import url("./blocks/header/header.css");
+@import url("./blocks/header/__logo/header__logo.css");
+
+/* Main */
+@import url("./blocks/main/main.css");
+
+/* Profile Section*/
+@import url("./blocks/profile/profile.css");
+@import url("./blocks/profile/__avatar/profile__avatar-cover.css");
+@import url("./blocks/profile/__avatar-btn/profile__avatar-btn.css");
+@import url("./blocks/profile/__avatar-btn-img/profile__avatar-btn-img.css");
+@import url("./blocks/profile/__avatar/profile__avatar.css");
+@import url("./blocks/profile/__info/profile__info.css");
+@import url("./blocks/profile/__name/profile__name.css");
+@import url("./blocks/profile/__edit-btn/profile__edit-btn.css");
+@import url("./blocks/profile/__about-me/profile__about-me.css");
+@import url("./blocks/profile/__add-btn-cover/profile__add-btn-cover.css");
+@import url("./blocks/profile/__add-btn/profile__add-btn.css");
+
+/* Places */
+@import url("./blocks/places/places.css");
+@import url("./blocks/places/__grid-container/places__grid-container.css");
+@import url("./blocks/places/__item/places__item.css");
+@import url("./blocks/places/__img/places__img.css");
+@import url("./blocks/places/__remove-btn/places__remove-btn.css");
+@import url("./blocks/places/__info-wrapper/places__info-wrapper.css");
+@import url("./blocks/places/__name/places__name.css");
+@import url("./blocks/places/__like-counter/places__like-counter.css");
+@import url("./blocks/places/__like-btn/places__like-btn.css");
+@import url("./blocks/places/__like-btn/__active/places__like-btn__active.css");
+
+/* Popup box */
+@import url("./blocks/popup-box/popup-box.css");
+@import url("./blocks/popup-box/_visible/popup-box_visible.css");
+@import url("./blocks/popup-box/__container/popup-box__container.css");
+@import url("./blocks/popup-box/__close-button/popup-box__close-button.css");
+@import url("./blocks/popup-box/__wrapper/popup-box__wrapper.css");
+
+/* Case of Picture Popup */
+@import url("./blocks/popup-box/__container/_type/_img/popup-box__container_type_img.css");
+@import url("./blocks/popup-box/__close-button/_type/_img/popup-box__close-button_type_img.css");
+@import url("./blocks/popup-box/__wrapper/_type/_img/popup-box__wrapper_type_img.css");
+@import url("./blocks/popup-box/__img/popup-box__img.css");
+@import url("./blocks/popup-box/__img-title/popup-box__img-title.css");
+
+/* Case of Input Pop */
+@import url("./blocks/popup-box/__heading/popup-box__heading.css");
+@import url("./blocks/popup-box/__form/popup-box__form.css");
+@import url("./blocks/popup-box/__fieldset/popup-box__fieldset.css");
+@import url("./blocks/popup-box/__input/popup-box__input.css");
+@import url("./blocks/popup-box/__input/_type/popup-box__input_type_error.css");
+@import url("./blocks/popup-box/__input-error/popup-box__input-error.css");
+@import url("./blocks/popup-box/__input-error/_active/popup-box__input-error.css");
+@import url("./blocks/popup-box/__input/_order/_first-input/popup-box__input_order_first-input.css");
+@import url("./blocks/popup-box/__input/_order/_second-input/popup-box__input_order_second-input.css");
+@import url("./blocks/popup-box/__submit-button/popup-box__submit-button.css");
+@import url("./blocks/popup-box/__submit-button/_inactive/popup-box__submit-button_inactive.css");
+
+@import url("./blocks/popup-box/__close-button/_type/_delete-confirm/popup-box__close-button_type_delete-confirm.css");
+@import url("./blocks/popup-box/__submit-button/_type/_delete-confirm/popup-box__submit-button_type_delete-confirm.css");
+
+/* Footer */
+@import url("./blocks/footer/footer.css");
+@import url("./blocks/footer/__text/footer__text.css");

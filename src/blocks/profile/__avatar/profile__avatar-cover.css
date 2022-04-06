@@ -1,0 +1,8 @@
+.profile__avatar-cover {
+  min-width: 120px;
+  min-height: 120px;
+  border-radius: 50%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}

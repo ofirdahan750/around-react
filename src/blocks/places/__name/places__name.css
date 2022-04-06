@@ -1,0 +1,12 @@
+.places__name {
+  display: inline-block;
+  font-weight: 900;
+  font-size: 1.5rem;
+  line-height: 1.208333333333333;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  grid-area: 1 / 1 / 2 / 2;
+}

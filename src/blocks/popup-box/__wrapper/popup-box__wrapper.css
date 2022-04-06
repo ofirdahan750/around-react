@@ -1,0 +1,11 @@
+.popup-box__wrapper {
+  max-width: 358px;
+  margin: 34px 36px 36.51px;
+}
+
+@media screen and (max-width: 461px) {
+  .popup-box__wrapper {
+    max-width: 238px;
+    margin: 25px 22px;
+  }
+}

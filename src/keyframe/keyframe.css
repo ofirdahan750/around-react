@@ -1,0 +1,85 @@
+@keyframes pulsate-bck {
+  0% {
+    transform: scale(1.2);
+    content: url("../images/places/like_btn_svg/like_btn_hover.svg");
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1.22);
+  }
+}
+
+@keyframes slow-opacity-submit {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+@keyframes slow-opacity-close {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  75% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes jello-diagonal-2 {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    transform: scale3d(0.75, 1.25, 1);
+    opacity: 0.9;
+  }
+  40% {
+    transform: scale3d(1.25, 0.75, 1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale3d(0.85, 1.15, 1);
+    opacity: 0.7;
+  }
+  65% {
+    transform: scale3d(1.05, 0.95, 1);
+    opacity: 0.6;
+  }
+  75% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+}
+@keyframes fade_in_show {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes showElmSmoth {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

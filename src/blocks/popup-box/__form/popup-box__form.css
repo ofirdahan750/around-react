@@ -1,0 +1,13 @@
+.popup-box__form {
+  display: flex;
+  flex-direction: column;
+  margin: 54px 0 0;
+}
+@media screen and (max-width: 461px) {
+  .popup-box__form {
+    font-weight: 900;
+    font-size: 1.125rem;
+    line-height: 1.22222222;
+    margin: 76px 0 0;
+  }
+}

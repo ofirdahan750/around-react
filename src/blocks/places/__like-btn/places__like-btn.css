@@ -1,0 +1,10 @@
+.places__like-btn::before {
+  content: url("../../../images/places/like_btn_svg/like_btn_unactive.svg");
+}
+.places__like-btn:hover {
+  animation: pulsate-bck 0.8s ease-in-out infinite both;
+}
+
+.places__like-btn:hover::before {
+  content: url("../../../images/places/like_btn_svg/like_btn_hover.svg");
+}
