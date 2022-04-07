@@ -3,42 +3,28 @@ import profilePicBtnSvg from "../images/profile/profile__pic-edit.svg";
 import profileAddBtnSvg from "../images/profile/profile__button-plus.svg";
 import profileEditBtnSvg from "../images/profile/profile__button-edit.svg";
 import { PopupWithForm } from "./PopupWithFrom.js";
-import React, { useState, useRef, useCallback } from "react";
-export const Main = () => {
-  const [popupOpenStatus, setEditProfileOpen] = useState({
-    addProfileOpen: false,
-    imgCardOpen: false,
-    editAvatarOpen: false,
-  });
-  const openPopUp = useRef("");
+import React, { useState } from "react";
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleEscClose = useCallback((e) => {
-    console.log("e:", e.key);
+export const Main = () => {
+  const [popupOpenName, setNamePopupOpen] = useState("");
+
+  const closePopup = () => {
+    setNamePopupOpen("");
+    document.removeEventListener("keydown", handleEscClose);
+  };
+  const handleEscClose = (e) => {
     if (e.key === "Escape") {
-      closePopup(openPopUp.current);
+      closePopup(popupOpenName);
     }
-  });
+  };
 
   const openPopup = (clickedPopUp) => {
-    setEditProfileOpen((prevStatus) => ({
-      prevStatus,
-      [clickedPopUp]: true,
-    }));
-    openPopUp.current = clickedPopUp;
+    setNamePopupOpen(clickedPopUp);
     document.addEventListener("keydown", handleEscClose);
   };
-  const closePopup = (clickedPopUp) => {
-    console.log('clickedPopUp:', clickedPopUp)
-    setEditProfileOpen((prevStatus) => ({
-      prevStatus,
-      [clickedPopUp]: false,
-    }));
-    document.removeEventListener("keydown", handleEscClose);
-    openPopUp.current = "";
-  };
+
   const setClassVisible = (currPopup) => {
-    return popupOpenStatus[currPopup] ? "popup-box_visible" : "";
+    return popupOpenName === currPopup ? "popup-box_visible" : "";
   };
   return (
     <>

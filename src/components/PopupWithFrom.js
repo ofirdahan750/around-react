@@ -17,7 +17,7 @@ export const PopupWithForm = ({
             type="button"
             className="popup-box__close-button button-modifier"
             name="profile-edit"
-            onClick={() => closePopup("editProfileOpen")}
+            onClick={() => closePopup()}
           ></button>
           <div className="popup-box__wrapper">
             <h2 className="popup-box__heading">Edit profile</h2>
@@ -69,7 +69,7 @@ export const PopupWithForm = ({
             name="add-item"
             type="button"
             className="popup-box__close-button button-modifier"
-            onClick={() => closePopup("addProfileOpen")}
+            onClick={() => closePopup()}
           ></button>
           <div className="popup-box__wrapper">
             <h2 className="popup-box__heading">New place</h2>
@@ -116,7 +116,7 @@ export const PopupWithForm = ({
             name="change-profile-pic"
             type="button"
             className="popup-box__close-button button-modifier"
-            onClick={() => closePopup("editAvatarOpen")}
+            onClick={() => closePopup()}
           ></button>
           <div className="popup-box__wrapper">
             <h2 className="popup-box__heading">Change profile picture</h2>

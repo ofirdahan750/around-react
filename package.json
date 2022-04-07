@@ -13,7 +13,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "cleandev":"rimraf node_modules && npm i && npm run start",
+    "cleandev": "rimraf node_modules && npm i && npm run start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
