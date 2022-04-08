@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/around-react/static/css/main.bad17330.css",
+    "main.js": "/around-react/static/js/main.b401c296.js",
+    "static/js/787.1c78f32b.chunk.js": "/around-react/static/js/787.1c78f32b.chunk.js",
+    "static/media/Inter-Medium.woff": "/around-react/static/media/Inter-Medium.9053572c46aeb4b16caa.woff",
+    "static/media/Inter-Black.woff": "/around-react/static/media/Inter-Black.c6938660eec019fefd68.woff",
+    "static/media/Inter-Regular.woff": "/around-react/static/media/Inter-Regular.8c206db99195777c6769.woff",
+    "static/media/Inter-Medium.woff2": "/around-react/static/media/Inter-Medium.293fd13dbca5a3e450ef.woff2",
+    "static/media/spinner_svg.svg": "/around-react/static/media/spinner_svg.dc4086388e55820fbae1870ee9e575e7.svg",
+    "static/media/header__logo.svg": "/around-react/static/media/header__logo.66cff89119b58975ea644f9d7f47a8c5.svg",
+    "static/media/error_svg.svg": "/around-react/static/media/error_svg.61849e3a83ea4f1c393e0ee1115852ff.svg",
+    "static/media/like_btn_hover.svg": "/around-react/static/media/like_btn_hover.0c95fa68953e6bebc897.svg",
+    "static/media/like_btn_unactive.svg": "/around-react/static/media/like_btn_unactive.99043841e8bec6b9df21.svg",
+    "index.html": "/around-react/index.html",
+    "static/media/remove_btn.svg": "/around-react/static/media/remove_btn.a85cc5e25106301e909ec4b962980e9e.svg",
+    "static/media/like_btn_active.svg": "/around-react/static/media/like_btn_active.f8482d28867cec189b08.svg",
+    "static/media/close-Icon.svg": "/around-react/static/media/close-Icon.4ee941268d7c77583a19.svg",
+    "static/media/profile__button-edit.svg": "/around-react/static/media/profile__button-edit.6c7bf05444b9793fdf6e73a2dd202e7e.svg",
+    "static/media/profile__pic-edit.svg": "/around-react/static/media/profile__pic-edit.a086f758840ae814ecdece4799d2cf40.svg",
+    "static/media/profile__button-plus.svg": "/around-react/static/media/profile__button-plus.bed8c136e13907f5eefb86d62a5fe29e.svg",
+    "main.bad17330.css.map": "/around-react/static/css/main.bad17330.css.map",
+    "main.b401c296.js.map": "/around-react/static/js/main.b401c296.js.map",
+    "787.1c78f32b.chunk.js.map": "/around-react/static/js/787.1c78f32b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bad17330.css",
+    "static/js/main.b401c296.js"
+  ]
+}
