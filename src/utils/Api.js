@@ -14,7 +14,6 @@ const _onHttpRequest = async (url, method, data) => {
     return Promise.reject(`Error: ${res.status}`);
   }
 };
-
 const _getUserInfo = () => {
   return _onHttpRequest("users/me", "GET");
 };
@@ -42,4 +41,3 @@ export const removeItemLike = (id) => {
 export const onUpdateProfilePic = ({ avatar }) => {
   return _onHttpRequest("users/me/avatar", "PATCH", { avatar });
 };
-// };

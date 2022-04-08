@@ -5,12 +5,15 @@ export const PopupWithForm = ({
   addProfileClass,
   editAvatarClass,
   closePopup,
+  handlePopupMouseDown,
 }) => {
   return (
     <>
       {/* <!-- Popup Profile Edit --> */}
       <section
         className={`popup-box popup-box_type_profile-edit ${editProfileClass}`}
+        onMouseDown={handlePopupMouseDown}
+        onContextMenu={(e)=> e.preventDefault()}
       >
         <div className="popup-box__container">
           <button
@@ -63,6 +66,8 @@ export const PopupWithForm = ({
       {/* <!-- Popup Add New Item --> */}
       <section
         className={`popup-box popup-box_type_add-item ${addProfileClass}`}
+        onMouseDown={handlePopupMouseDown}
+        onContextMenu={(e)=> e.preventDefault()}
       >
         <div className="popup-box__container">
           <button
@@ -110,6 +115,8 @@ export const PopupWithForm = ({
       {/* <!-- Popup Change Profile Pic --> */}
       <section
         className={`popup-box popup-box_type_change-profile-pic ${editAvatarClass}`}
+        onMouseDown={handlePopupMouseDown}
+        onContextMenu={(e)=> e.preventDefault()}
       >
         <div className="popup-box__container">
           <button

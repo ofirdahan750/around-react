@@ -1,12 +1,38 @@
-import spinnerGif from "../images/profile/spinner_svg.svg";
+import spinnerGif from "../images/api/spinner_svg.svg";
 import profilePicBtnSvg from "../images/profile/profile__pic-edit.svg";
 import profileAddBtnSvg from "../images/profile/profile__button-plus.svg";
 import profileEditBtnSvg from "../images/profile/profile__button-edit.svg";
 import { PopupWithForm } from "./PopupWithFrom.js";
-import React, { useState } from "react";
+import { Cards } from "./Cards.js";
+import React, { useEffect, useState } from "react";
+import { loadingState, loadingError } from "../utils/constants.js";
+import {
+  addItemLike,
+  addNewCard,
+  getInitInfo,
+  removeItemLike,
+} from "../utils/Api";
 
 export const Main = () => {
   const [popupOpenName, setNamePopupOpen] = useState("");
+  const [cards, setCards] = useState(loadingState.card);
+  const [userInfo, setUserInfo] = useState(loadingState.useInfo);
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    getInitInfo()
+      .then(([cardItemsArr, userInfoRes]) => {
+        setLoading(false);
+        setCards(cardItemsArr);
+        setUserInfo(userInfoRes);
+      })
+      .catch((err) => {
+        console.log(err);
+        setCards(loadingError.card);
+        setUserInfo(loadingError.useInfo);
+      });
+  }, []);
 
   const closePopup = () => {
     setNamePopupOpen("");
@@ -19,20 +45,47 @@ export const Main = () => {
   };
 
   const openPopup = (clickedPopUp) => {
+    if (isLoading) return;
     setNamePopupOpen(clickedPopUp);
     document.addEventListener("keydown", handleEscClose);
   };
-
+  const handlePopupMouseDown = (e) => {
+    const contextMenu = 2;
+    if (e.button === contextMenu) return;
+    if (
+      e.target.classList.contains("popup-box_visible") ||
+      e.target.classList.contains("popup-box__close-button")
+    ) {
+      closePopup();
+    }
+  };
   const setClassVisible = (currPopup) => {
     return popupOpenName === currPopup ? "popup-box_visible" : "";
   };
+  const handleToggleLikedBtn = (isLiked, id) => {
+    if (isLoading) return;
+    if (!isLiked) {
+      addItemLike(id).then((res) => {
+        const newState = [...cards];
+        newState.find((item) => item._id === id).likes = res.likes;
+        setCards(newState);
+      });
+    } else {
+      removeItemLike(id).then((res) => {
+        const newState = [...cards];
+        newState.find((item) => item._id === id).likes = res.likes;
+        setCards(newState);
+      });
+    }
+  };
+
   return (
     <>
       <main className="main">
         <section className="profile">
           <div
             className="profile__avatar-cover"
-            style={{ backgroundImage: `url(${spinnerGif})` }}
+            style={{ backgroundImage: `url(${userInfo.avatar || spinnerGif})` }}
             onClick={() => openPopup("editAvatarOpen")}
           >
             <button
@@ -47,7 +100,7 @@ export const Main = () => {
             </button>
           </div>
           <div className="profile__info">
-            <h1 className="profile__name">Loading...</h1>
+            <h1 className="profile__name">{userInfo.name || "Loading..."}</h1>
             <button
               type="button"
               className="profile__edit-btn-cover button-modifier"
@@ -59,7 +112,9 @@ export const Main = () => {
                 alt="Edit profile button"
               />
             </button>
-            <p className="profile__about-me">Loading...</p>
+            <p className="profile__about-me">
+              {userInfo.about || "Loading..."}
+            </p>
           </div>
           <button
             type="button"
@@ -74,7 +129,19 @@ export const Main = () => {
           </button>
         </section>
         <section className="places">
-          <ul className="places__grid-container"></ul>
+          <ul className="places__grid-container">
+            {cards.map((card) => {
+              return (
+                <Cards
+                  card={card}
+                  key={card._id}
+                  userId={userInfo._id}
+                  spinnerGif={spinnerGif}
+                  handleToggleLikedBtn={handleToggleLikedBtn}
+                />
+              );
+            })}
+          </ul>
         </section>
       </main>
       <PopupWithForm
@@ -82,6 +149,7 @@ export const Main = () => {
         addProfileClass={setClassVisible("addProfileOpen")}
         editAvatarClass={setClassVisible("editAvatarOpen")}
         closePopup={closePopup}
+        handlePopupMouseDown={handlePopupMouseDown}
       />
 
       {/* <!-- Popup Img --> */}

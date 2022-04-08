@@ -10,33 +10,6 @@ function App() {
         <Main />
         <Footer />
       </div>
-
-      {/* <!-- template place --> */}
-      <template id="places-item-template">
-        <li className="places__item">
-          <div className="places__img">
-            <button
-              type="button"
-              className="places__remove-btn button-modifier"
-            >
-              <img
-                src="<%= require('./images/places/remove_btn_svg/trash-btn.svg')%>"
-                alt="Removeing button icon"
-              />
-            </button>
-          </div>
-          <div className="places__info-wrapper">
-            <h2 className="places__name">Loading...</h2>
-            <div>
-              <button
-                type="button"
-                className="places__like-btn button-modifier"
-              ></button>
-              <p className="places__like-counter"></p>
-            </div>
-          </div>
-        </li>
-      </template>
     </div>
   );
 }
