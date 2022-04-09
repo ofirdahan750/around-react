@@ -1,8 +1,18 @@
 import removeBtn from "../images/places/remove_btn.svg";
-export const Cards = ({ card, userId, spinnerGif, handleToggleLikedBtn }) => {
+export const Cards = ({
+  card,
+  userId,
+  spinnerGif,
+  handleToggleLikedBtn,
+  openPopup,
+  setRemoveCardId,
+}) => {
   const { name, link, likes, owner, _id } = card;
   const isLiked = likes.find((like) => like._id === userId);
-
+  const handleOpenRemoveCard = () => {
+    setRemoveCardId(_id);
+    openPopup("confirmRemoveOpen");
+  };
   return (
     <li className="places__item">
       <div
@@ -10,7 +20,11 @@ export const Cards = ({ card, userId, spinnerGif, handleToggleLikedBtn }) => {
         style={{ backgroundImage: `url(${link || spinnerGif})` }}
       >
         {owner._id === userId && (
-          <button type="button" className="places__remove-btn button-modifier">
+          <button
+            type="button"
+            onClick={handleOpenRemoveCard}
+            className="places__remove-btn button-modifier"
+          >
             <img alt="Remove card button" src={removeBtn} />
           </button>
         )}
