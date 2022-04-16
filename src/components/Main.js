@@ -1,11 +1,11 @@
-import spinnerGif from "../images/api/spinner_svg.svg";
-import profilePicBtnSvg from "../images/profile/profile__pic-edit.svg";
-import profileAddBtnSvg from "../images/profile/profile__button-plus.svg";
-import profileEditBtnSvg from "../images/profile/profile__button-edit.svg";
-import { PopupWithForm } from "./PopupWithFrom.js";
-import { Cards } from "./Cards.js";
-import React, { useEffect, useState } from "react";
-import { loadingState, loadingError, txtErr } from "../utils/constants.js";
+import spinnerGif from '../images/api/spinner_svg.svg';
+import profilePicBtnSvg from '../images/profile/profile__pic-edit.svg';
+import profileAddBtnSvg from '../images/profile/profile__button-plus.svg';
+import profileEditBtnSvg from '../images/profile/profile__button-edit.svg';
+import { PopupWithForm } from './Popups/PopupWithFrom.js';
+import { Cards } from './Cards.js';
+import React, { useCallback, useEffect, useState } from 'react';
+import { loadingInitState, loadingInitError, txtErr, formSettingState } from '../utils/constants.js';
 import {
   addItemLike,
   addNewCard,
@@ -14,20 +14,17 @@ import {
   onUpdateProfilePic,
   removeItemLike,
   setUserInfo,
-} from "../utils/Api";
+} from '../utils/Api';
 
 export const Main = () => {
-  const [popupOpenName, setNamePopupOpen] = useState("");
-  const [cards, setCards] = useState(loadingState.card);
-  const [userInfo, setUserStateInfo] = useState(loadingState.useInfo);
+  const [popupOpenName, setNamePopupOpen] = useState('');
+  const [cards, setCards] = useState(loadingInitState.card);
+  const [userInfo, setUserStateInfo] = useState(loadingInitState.useInfo);
   const [isLoading, setLoading] = useState(true);
-  const [inputVal, setInputVal] = useState({
-    firstInputVal: "",
-    secInputVal: "",
-  });
-  const [btnSetting, setBtnSetting] = useState({ btnTxt: "", isDisable: true });
-  const [removeCardId, setRemoveCardId] = useState("");
-
+  const [removeCardId, setRemoveCardId] = useState('');
+  const [formSetting, setFormsSetting] = useState(formSettingState.init);
+  const [inputVals, setInputVals] = useState({ firstInputVal: '', secInputVal: '' });
+  const [isPopupOpen, setPopupOpen] = useState(false);
   useEffect(() => {
     //Init only
     setLoading(true);
@@ -37,169 +34,192 @@ export const Main = () => {
         setCards(cardItemsArr);
         setUserStateInfo(userInfoRes);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
-        setCards(loadingError.card);
-        setUserStateInfo(loadingError.useInfo);
+        setCards(loadingInitError.card);
+        setUserStateInfo(loadingInitError.useInfo);
       });
   }, []);
-
   useEffect(() => {
-    //Change popup button txt and set value while open
-    switch (popupOpenName) {
-      case "editProfileOpen":
-        setInputVal({
-          firstInputVal: userInfo.name,
-          secInputVal: userInfo.about,
-        });
-        setBtnSetting({ btnTxt: "Save", isDisable: false });
-        break;
-      case "addProfileOpen":
-        setBtnSetting({ btnTxt: "Create", isDisable: false });
-        break;
-      case "editAvatarOpen":
-        setBtnSetting({ btnTxt: "Save", isDisable: false });
-        break;
-      case "confirmRemoveOpen":
-        setBtnSetting({ btnTxt: "Yes", isDisable: false });
-        break;
-      default:
-        setBtnSetting({ btnTxt: "Closing...", isDisable: true });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [popupOpenName]);
+    if (isPopupOpen) {
+      document.addEventListener('keydown', handleEscClose);
+      if (formSetting.type === 'profile-edit') {
+        setInputVals({ firstInputVal: userInfo.name, secInputVal: userInfo.about });
+      } else {
+        setInputVals({ firstInputVal: '', secInputVal: '' });
+      }
+    } else {
+      document.removeEventListener('keydown', handleEscClose);
+      setTimeout(() => {
+        setInputVals({ firstInputVal: '', secInputVal: '' });
+      }, 90);
 
+    }
+  }, [isPopupOpen]);
+  const setClassVisible = () => {
+    return isPopupOpen ? 'popup-box_visible' : '';
+  };
   const closePopup = () => {
-    setNamePopupOpen("");
-    document.removeEventListener("keydown", handleEscClose);
-  };
-  const openPopup = (clickedPopUp) => {
-    if (isLoading) return;
-    setNamePopupOpen(clickedPopUp);
-    document.addEventListener("keydown", handleEscClose);
-  };
-  const onHandleErrorSubmit = ({ error, initialBtnTxt = "Save" }) => {
-    console.log(`Error: ${error}`);
-    setBtnSetting({ btnTxt: txtErr, isDisable: true });
+    onHandleBtnText('Close...', true);
     setTimeout(() => {
-      setBtnSetting({ btnTxt: initialBtnTxt, isDisable: false });
-    }, 1100);
+      setPopupOpen(false);
+    }, 1);
   };
-  const handleSubmitAddItem = (e) => {
-    e.preventDefault();
-    setBtnSetting({ btnTxt: "Saving....", isDisable: true });
-    addNewCard({ name: inputVal.firstInputVal, link: inputVal.secInputVal })
-      .then((res) => {
-        setBtnSetting({
-          btnTxt: "Place added successfully!",
-          isDisable: true,
-        });
-        setCards((prevState) => [res, ...prevState]);
-        setTimeout(() => {
-          closePopup();
-        }, 1000);
-      })
-      .catch((err) => {
-        onHandleErrorSubmit({ error: err, initialBtnTxt: "Create" });
-      });
+  const openPopup = (clickedPopUpSetting) => {
+    if (isLoading) return;
+    setPopupOpen(true);
+    setFormsSetting(formSettingState[clickedPopUpSetting]);
   };
-  const handleSubmitChangeProfilePic = (e) => {
-    e.preventDefault();
-    setBtnSetting({ btnTxt: "Saving....", isDisable: true });
-    onUpdateProfilePic({ avatar: inputVal.firstInputVal })
-      .then(() => {
-        setBtnSetting({
-          btnTxt: "Profile Picture modified successfully!",
-          isDisable: true,
-        });
-        const avatar = "avatar";
-        setUserStateInfo((prevState) => ({
+  const onHandleBtnText = (btnTxt = 'Saving...', isDisable = true, error) => {
+    if (error) {
+      console.log(`Error: ${error}`);
+      setFormsSetting(prevState => ({
+        ...prevState,
+        btnSetting: { txt: txtErr, isDisable: true },
+      }));
+      setTimeout(() => {
+        setFormsSetting(prevState => ({
           ...prevState,
-          [avatar]: inputVal.firstInputVal,
+          btnSetting: { txt: btnTxt, isDisable: false },
         }));
+      }, 1100);
+    } else {
+      setFormsSetting(prevState => ({
+        ...prevState,
+        btnSetting: { txt: btnTxt, isDisable: isDisable },
+      }));
+    }
+  };
+  const handleSubmitAddItem = e => {
+    e.preventDefault();
+    onHandleBtnText();
+    addNewCard({
+      name: inputVals.firstInputVal,
+      link: inputVals.secInputVal,
+    })
+      .then(res => {
+        onHandleBtnText('Place added successfully!', true);
+        setCards(prevState => [res, ...prevState]);
         setTimeout(() => {
           closePopup();
         }, 1000);
       })
-      .catch((err) => {
-        onHandleErrorSubmit({ error: err });
+      .catch(err => {
+        onHandleBtnText('Create', true, err);
       });
   };
   const handleSubmitEditProfile = (e) => {
     e.preventDefault();
-    setBtnSetting({ btnTxt: "Saving....", isDisable: true });
-    setUserInfo({ name: inputVal.firstInputVal, about: inputVal.secInputVal })
-      .then((res) => {
-        setBtnSetting({
-          btnTxt: "Profile edited successfully!",
-          isDisable: true,
-        });
+    onHandleBtnText();
+    setUserInfo({ name: inputVals.firstInputVal, about: inputVals.secInputVal })
+      .then(res => {
+        onHandleBtnText('Profile edited successfully!', true);
         setUserStateInfo(res);
         setTimeout(() => {
           closePopup();
         }, 1000);
       })
-      .catch((err) => {
-        onHandleErrorSubmit({ error: err });
+      .catch(err => {
+        onHandleBtnText('Save', true, err);
       });
   };
   const handleSubmitRemoveCard = (e) => {
     e.preventDefault();
-    setBtnSetting({ btnTxt: "Saving....", isDisable: true });
-    onRemoveItem(removeCardId)
+    onHandleBtnText();
+    onRemoveItem(formSetting.cardId)
       .then(() => {
-        setBtnSetting({
-          btnTxt: "Place removed successfully!",
-          isDisable: true,
-        });
-        setCards(cards.filter((item) => item._id !== removeCardId));
-        setRemoveCardId("");
+        onHandleBtnText("Place removed successfully!", true);
+        setCards(cards.filter((item) => item._id !== formSetting.cardId));
         setTimeout(() => {
           closePopup();
         }, 1000);
       })
       .catch((err) => {
-        onHandleErrorSubmit({ error: err, initialBtnTxt: "Yes" });
+        onHandleBtnText('Yes', true, err);
+
       });
   };
-  const setClassVisible = (currPopup) => {
-    return popupOpenName === currPopup ? "popup-box_visible" : "";
-  };
-  const handlePopupMouseDown = (e) => {
+  // const handleSubmitChangeProfilePic = (e) => {
+  //   e.preventDefault();
+  //   setBtnSetting({ btnTxt: "Saving....", isDisable: true });
+  //   onUpdateProfilePic({ avatar: inputVal.firstInputVal })
+  //     .then(() => {
+  //       setBtnSetting({
+  //         btnTxt: "Profile Picture modified successfully!",
+  //         isDisable: true,
+  //       });
+  //       const avatar = "avatar";
+  //       setUserStateInfo((prevState) => ({
+  //         ...prevState,
+  //         [avatar]: inputVal.firstInputVal,
+  //       }));
+  //       setTimeout(() => {
+  //         closePopup();
+  //       }, 1000);
+  //     })
+  //     .catch((err) => {
+  //       onHandleErrorSubmit({ error: err });
+  //     });
+  // };
+  // const handleSubmitRemoveCard = (e) => {
+  //   e.preventDefault();
+  //   setBtnSetting({ btnTxt: "Saving....", isDisable: true });
+  //   onRemoveItem(removeCardId)
+  //     .then(() => {
+  //       setBtnSetting({
+  //         btnTxt: "Place removed successfully!",
+  //         isDisable: true,
+  //       });
+  //       setCards(cards.filter((item) => item._id !== removeCardId));
+  //       setRemoveCardId("");
+  //       setTimeout(() => {
+  //         closePopup();
+  //       }, 1000);
+  //     })
+  //     .catch((err) => {
+  //       onHandleErrorSubmit({ error: err, initialBtnTxt: "Yes" });
+  //     });
+  // };
+  // function onHandleErrorSubmit() {
+  //   console.log("");
+  // }
+
+  const handlePopupMouseDown = e => {
     const contextMenu = 2;
     if (e.button === contextMenu) return;
     if (
-      e.target.classList.contains("popup-box_visible") ||
-      e.target.classList.contains("popup-box__close-button")
+      e.target.classList.contains('popup-box_visible') ||
+      e.target.classList.contains('popup-box__close-button')
     ) {
       closePopup();
     }
   };
-  const handleEscClose = (e) => {
-    if (e.key === "Escape") {
+  const handleEscClose = useCallback(e => {
+    console.log('e:', e);
+    if (e.key === 'Escape') {
       closePopup(popupOpenName);
     }
-  };
+  }, []);
 
   const handleToggleLikedBtn = (isLiked, id) => {
     if (isLoading) return;
     if (!isLiked) {
-      addItemLike(id).then((res) => {
+      addItemLike(id).then(res => {
         const newState = [...cards];
-        newState.find((item) => item._id === id).likes = res.likes;
+        newState.find(item => item._id === id).likes = res.likes;
         setCards(newState);
       });
     } else {
-      removeItemLike(id).then((res) => {
+      removeItemLike(id).then(res => {
         const newState = [...cards];
-        newState.find((item) => item._id === id).likes = res.likes;
+        newState.find(item => item._id === id).likes = res.likes;
         setCards(newState);
       });
     }
   };
 
   const onChangeInput = (changedValName, inputTxtVAL) => {
-    setInputVal((prevState) => ({
+    setInputVals(prevState => ({
       ...prevState,
       [changedValName]: inputTxtVAL,
     }));
@@ -212,12 +232,9 @@ export const Main = () => {
           <div
             className="profile__avatar-cover"
             style={{ backgroundImage: `url(${userInfo.avatar || spinnerGif})` }}
-            onClick={() => openPopup("editAvatarOpen")}
+            onClick={() => openPopup('editAvatarOpen')}
           >
-            <button
-              className="profile__avatar-btn button-modifier"
-              alt="Avatar user photo"
-            >
+            <button className="profile__avatar-btn button-modifier" alt="Avatar user photo">
               <img
                 src={profilePicBtnSvg}
                 alt="Edit profile PIC pencil button"
@@ -226,37 +243,27 @@ export const Main = () => {
             </button>
           </div>
           <div className="profile__info">
-            <h1 className="profile__name">{userInfo.name || "Loading..."}</h1>
+            <h1 className="profile__name">{userInfo.name || 'Loading...'}</h1>
             <button
               type="button"
               className="profile__edit-btn-cover button-modifier"
-              onClick={() => openPopup("editProfileOpen")}
+              onClick={() => openPopup("editProfile")}
             >
-              <img
-                src={profileEditBtnSvg}
-                className="profile__edit-btn"
-                alt="Edit profile button"
-              />
+              <img src={profileEditBtnSvg} className="profile__edit-btn" alt="Edit profile button" />
             </button>
-            <p className="profile__about-me">
-              {userInfo.about || "Loading..."}
-            </p>
+            <p className="profile__about-me">{userInfo.about || 'Loading...'}</p>
           </div>
           <button
             type="button"
             className="profile__add-btn-cover button-modifier"
-            onClick={() => openPopup("addProfileOpen")}
+            onClick={() => openPopup("addItem")}
           >
-            <img
-              src={profileAddBtnSvg}
-              className="profile__add-btn"
-              alt="Edit profile button"
-            />
+            <img src={profileAddBtnSvg} className="profile__add-btn" alt="Edit profile button" />
           </button>
         </section>
         <section className="places">
           <ul className="places__grid-container">
-            {cards.map((card) => {
+            {cards.map(card => {
               return (
                 <Cards
                   card={card}
@@ -265,35 +272,31 @@ export const Main = () => {
                   spinnerGif={spinnerGif}
                   handleToggleLikedBtn={handleToggleLikedBtn}
                   openPopup={openPopup}
-                  setRemoveCardId={setRemoveCardId}
+                  setFormsSetting={setFormsSetting}
                 />
               );
             })}
           </ul>
         </section>
       </main>
-      <PopupWithForm
-        popupClass={{
-          editProfileClass: setClassVisible("editProfileOpen"),
-          addProfileClass: setClassVisible("addProfileOpen"),
-          editAvatarClass: setClassVisible("editAvatarOpen"),
-          confirmRemoveClass: setClassVisible("confirmRemoveOpen"),
-        }}
-        handleSubmit={{
-          handleSubmitEditProfile,
-          handleSubmitAddItem,
-          handleSubmitChangeProfilePic,
-          handleSubmitRemoveCard,
-        }}
-        closePopup={closePopup}
-        handlePopupMouseDown={handlePopupMouseDown}
-        userOpenInfo={inputVal}
-        onChangeInput={onChangeInput}
-        btnSetting={btnSetting}
-      />
+      {formSetting && (
+        <PopupWithForm
+          handlePopupMouseDown={handlePopupMouseDown}
+          formSetting={formSetting}
+          inputVals={inputVals}
+          onChangeInput={onChangeInput}
+          closePopup={closePopup}
+          setInputVal={setInputVals}
+          handleSubmitAddItem={handleSubmitAddItem}
+          handleSubmitEditProfile={handleSubmitEditProfile}
+          handleSubmitRemoveCard={handleSubmitRemoveCard}
+          setClassVisible={setClassVisible()}
+          txtErr={txtErr}
+        />
+      )}
 
       {/* <!-- Popup Img --> */}
-      <section className="popup-box popup-box_type_img">
+      {/* <section className="popup-box popup-box_type_img">
         <div className="popup-box__container popup-box__container_type_img">
           <button
             name="img"
@@ -309,7 +312,7 @@ export const Main = () => {
             <p className="popup-box__img-title"></p>
           </div>
         </div>
-      </section>
+      </section>  */}
     </>
   );
 };

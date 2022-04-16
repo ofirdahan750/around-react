@@ -1,26 +1,26 @@
-import { getRandomString } from "./utils";
-import spinnerGif from "../images/api/spinner_svg.svg";
-import errImg from "../images/api/error_svg.svg";
+import { getRandomString } from './utils';
+import spinnerGif from '../images/api/spinner_svg.svg';
+import errImg from '../images/api/error_svg.svg';
 const formValidators = {};
-const txtErr = "Something went wrong, please try again later ";
+const txtErr = 'Something went wrong, please try again later ';
 
-const loadingState = {
+const loadingInitState = {
   card: [
     {
-      name: "Loading...",
+      name: 'Loading...',
       link: { spinnerGif },
       likes: [],
       _id: getRandomString(),
       owner: { _id: getRandomString() },
     },
   ],
-  useInfo: { name: "Loading...", about: "Loading...", avatar: spinnerGif },
+  useInfo: { name: 'Loading...', about: 'Loading...', avatar: spinnerGif },
 };
-const loadingError = {
+const loadingInitError = {
   card: [
     {
       name: txtErr,
-      link: errImg ,
+      link: errImg,
       likes: [],
       _id: getRandomString(),
       owner: { _id: getRandomString() },
@@ -28,5 +28,32 @@ const loadingError = {
   ],
   useInfo: { name: txtErr, about: txtErr, avatar: errImg },
 };
+const formSettingState = {
+  init: {
+    type: 'init',
+    heading: 'Loading...',
+    btnSetting: { txt: 'Loading...', isDisable: true }
+  },
+  addItem: {
+    type: 'add-item',
+    heading: 'New place',
+    btnSetting: { txt: 'Create', isDisable: false },
+  },
+  editProfile: {
+    type: 'profile-edit',
+    heading: 'Edit profile',
+    btnSetting: { txt: 'Save', isDisable: false },
+  },
+  confirmRemoveOpen: {
+    type: 'confirm',
+    heading: 'Are you sure?',
+    btnSetting: { txt: 'Yes', isDisable: false },
+    cardId:''
+  },
 
-export { formValidators, txtErr, loadingError, loadingState };
+};
+
+export {
+  formValidators, txtErr, loadingInitError,
+  loadingInitState, formSettingState
+};

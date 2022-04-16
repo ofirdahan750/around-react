@@ -20,8 +20,8 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "push": "git add . && git commit -m \"add script push\" && git push",
-    "fullpush": "git add . && git commit -m \"add script push\" && git push && npm run deploy"
+    "push": "git add . && git commit -m \"add script fullpush\" && git push",
+    "fullpush": "npm run push && npm run deploy"
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "eslint-plugin-prettier": "^4.0.0",
     "gh-pages": "^3.2.3"
   }
 }
