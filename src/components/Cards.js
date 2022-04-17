@@ -5,22 +5,32 @@ export const Cards = ({
   spinnerGif,
   handleToggleLikedBtn,
   openPopup,
-  setFormsSetting,
+  setFormsSetting
 }) => {
-  const { name, link, likes, owner, _id } = card;
+  const {name, link, likes, owner, _id} = card;
   const isLiked = likes.find((like) => like._id === userId);
-  const handleOpenRemoveCard = () => {
+  const handleOpenRemoveCard = (e) => {
+    e.stopPropagation()
     openPopup("confirmRemoveOpen");
-    setFormsSetting(prevState => ({
+    setFormsSetting((prevState) => ({
       ...prevState,
-      cardId: _id,
+      cardId: _id
+    }));
+  };
+  const openImagePopup = () => {
+    openPopup("imagePopup");
+    setFormsSetting((prevState) => ({
+      ...prevState,
+      title: name,
+      link: link
     }));
   };
   return (
     <li className="places__item">
       <div
+        onClick={openImagePopup}
         className="places__img"
-        style={{ backgroundImage: `url(${link || spinnerGif})` }}
+        style={{backgroundImage: `url(${link || spinnerGif})`}}
       >
         {owner._id === userId && (
           <button
@@ -37,8 +47,9 @@ export const Cards = ({
         <div>
           <button
             type="button"
-            className={`places__like-btn button-modifier ${isLiked ? "places__like-btn__active" : ""
-              }`}
+            className={`places__like-btn button-modifier ${
+              isLiked ? "places__like-btn__active" : ""
+            }`}
             onClick={() => handleToggleLikedBtn(isLiked, _id)}
           ></button>
           <p className="places__like-counter">{likes.length || 0}</p>

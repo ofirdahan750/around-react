@@ -1,34 +1,44 @@
 import React, { useState } from 'react';
 import { AddPlacesForm } from './PopupForm/AddPlacesForm.js';
 import { EditProfileForm } from './PopupForm/EditProfileForm.js';
-export const PopupWithForm = ({ txtErr, handlePopupMouseDown, formSetting: { type, heading, btnSetting },
+import { EditAvatarForm } from './PopupForm/EditAvatarForm.js';
+
+export const PopupWithForm = ({ txtErr, handlePopupMouseDown, formSetting: { type, btnSetting, heading },
 	inputVals, onChangeInput, closePopup,
-	handleSubmitAddItem, handleSubmitEditProfile, setClassVisible, handleSubmitRemoveCard }) => {
+	handleSubmitAddItem, handleSubmitChangeProfilePic, handleSubmitEditProfile, setClassVisible, handleSubmitRemoveCard }) => {
 	const setInputElem = () => {
 		switch (type) {
 			case 'add-item':
 				return (
 					<AddPlacesForm handleSubmitAddItem={handleSubmitAddItem}
 						inputVals={inputVals} onChangeInput={onChangeInput}
-						btnSetting={btnSetting} />
+						btnSetting={btnSetting} type={type} />
 				)
 			case 'profile-edit':
 				return (
 					<EditProfileForm handleSubmitEditProfile={handleSubmitEditProfile}
 						inputVals={inputVals} onChangeInput={onChangeInput}
-						btnSetting={btnSetting} />
+						btnSetting={btnSetting} type={type} />
+				)
+			case 'change-profile-pic':
+				return (
+					<EditAvatarForm handleSubmitChangeProfilePic={handleSubmitChangeProfilePic}
+						inputVals={inputVals} onChangeInput={onChangeInput}
+						btnSetting={btnSetting} type={type} />
 				)
 			case 'confirm':
 				return (
-					<button
-						className="popup-box__submit-button popup-box__submit-button_type_delete-confirm button-modifier"
-						type="click"
-						disabled={btnSetting.isDisable}
-						onClick={handleSubmitRemoveCard}
-						name="btn_confirm"
-					>
-						{btnSetting.txt}
-					</button>
+					<fieldset className="popup-box__fieldset">
+						<button
+							className="popup-box__submit-button popup-box__submit-button_type_delete-confirm button-modifier"
+							type="click"
+							disabled={btnSetting.isDisable}
+							onClick={handleSubmitRemoveCard}
+							name="btn_confirm"
+						>
+							{btnSetting.txt}
+						</button>
+					</fieldset>
 				)
 
 			case 'init':
@@ -51,11 +61,7 @@ export const PopupWithForm = ({ txtErr, handlePopupMouseDown, formSetting: { typ
 				></button>
 				<div className="popup-box__wrapper">
 					<h2 className="popup-box__heading">{heading}</h2>
-					<form name={`form_${type}`} className="popup-box__form" noValidate>
-						<fieldset className="popup-box__fieldset">
-							{setInputElem()}
-						</fieldset>
-					</form>
+					{setInputElem()}
 				</div>
 			</div>
 		</div>
