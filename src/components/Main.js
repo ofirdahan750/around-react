@@ -3,6 +3,7 @@ import profilePicBtnSvg from "../images/profile/profile__pic-edit.svg";
 import profileAddBtnSvg from "../images/profile/profile__button-plus.svg";
 import profileEditBtnSvg from "../images/profile/profile__button-edit.svg";
 import {PopupWithForm} from "./Popups/PopupWithFrom.js";
+import {PopupImage} from "./Popups/PopupImage.js";
 import {Cards} from "./Cards.js";
 import React, {useCallback, useEffect, useState} from "react";
 import {
@@ -10,7 +11,6 @@ import {
   loadingInitError,
   txtErr,
   formSettingState,
-  imgPopupState,
   errImg
 } from "../utils/constants.js";
 import {
@@ -67,9 +67,7 @@ export const Main = () => {
       }, 90);
     }
   }, [isPopupOpen]);
-  const setClassVisible = (type) => {
-    return (formSetting.type === type) & isPopupOpen ? "popup-box_visible" : "";
-  };
+
   const closePopup = () => {
     onHandleBtnText("Close...", true);
     setTimeout(() => {
@@ -179,7 +177,6 @@ export const Main = () => {
     }
   };
   const handleEscClose = useCallback((e) => {
-    console.log("e:", e);
     if (e.key === "Escape") {
       closePopup();
     }
@@ -287,37 +284,16 @@ export const Main = () => {
         handleSubmitEditProfile={handleSubmitEditProfile}
         handleSubmitRemoveCard={handleSubmitRemoveCard}
         handleSubmitChangeProfilePic={handleSubmitChangeProfilePic}
-        setClassVisible={setClassVisible}
         txtErr={txtErr}
       />
-
-      <section
-        className={`popup-box popup-box_type_img ${
-          isPopupOpen && formSetting.type === "img" ? "popup-box_visible" : ""
-        }`}
-        onMouseDown={handlePopupMouseDown}
-      >
-        <div className="popup-box__container popup-box__container_type_img">
-          <button
-            name="img"
-            onClick={closePopup}
-            type="button"
-            className="popup-box__close-button popup-box__close-button_type_img button-modifier"
-          ></button>
-          <div className="popup-box__wrapper popup-box__wrapper_type_img">
-            <img
-              src={formSetting.link ? formSetting.link : errImg}
-              className="popup-box__img"
-              alt={`A larger photo of: ${
-                formSetting.title ? formSetting.title : txtErr
-              }`}
-            />
-            <p className="popup-box__img-title">
-              ${formSetting.title ? formSetting.title : txtErr}
-            </p>
-          </div>
-        </div>
-      </section>
+      <PopupImage
+        formSetting={formSetting}
+        isPopupOpen={isPopupOpen}
+        closePopup={closePopup}
+        handlePopupMouseDown={handlePopupMouseDown}
+        txtErr={txtErr}
+        errImg={errImg}
+      />
     </>
   );
 };

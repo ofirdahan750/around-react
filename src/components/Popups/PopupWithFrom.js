@@ -13,7 +13,6 @@ export const PopupWithForm = ({
   handleSubmitAddItem,
   handleSubmitChangeProfilePic,
   handleSubmitEditProfile,
-  setClassVisible,
   isPopupOpen,
   handleSubmitRemoveCard
 }) => {

@@ -10,7 +10,7 @@ export const Cards = ({
   const {name, link, likes, owner, _id} = card;
   const isLiked = likes.find((like) => like._id === userId);
   const handleOpenRemoveCard = (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     openPopup("confirmRemoveOpen");
     setFormsSetting((prevState) => ({
       ...prevState,
@@ -22,7 +22,7 @@ export const Cards = ({
     setFormsSetting((prevState) => ({
       ...prevState,
       title: name,
-      link: link
+      link
     }));
   };
   return (
