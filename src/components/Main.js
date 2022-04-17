@@ -10,6 +10,7 @@ import {
   loadingInitError,
   txtErr,
   formSettingState,
+  imgPopupState,
   errImg
 } from "../utils/constants.js";
 import {
@@ -66,8 +67,8 @@ export const Main = () => {
       }, 90);
     }
   }, [isPopupOpen]);
-  const setClassVisible = () => {
-    return isPopupOpen ? "popup-box_visible" : "";
+  const setClassVisible = (type) => {
+    return (formSetting.type === type) & isPopupOpen ? "popup-box_visible" : "";
   };
   const closePopup = () => {
     onHandleBtnText("Close...", true);
@@ -207,7 +208,6 @@ export const Main = () => {
       [changedValName]: inputTxtVAL
     }));
   };
-
   return (
     <>
       <main className="main">
@@ -275,51 +275,49 @@ export const Main = () => {
           </ul>
         </section>
       </main>
-      {formSetting.type !== "img" && (
-        <PopupWithForm
-          handlePopupMouseDown={handlePopupMouseDown}
-          formSetting={formSetting}
-          inputVals={inputVals}
-          onChangeInput={onChangeInput}
-          closePopup={closePopup}
-          setInputVal={setInputVals}
-          handleSubmitAddItem={handleSubmitAddItem}
-          handleSubmitEditProfile={handleSubmitEditProfile}
-          handleSubmitRemoveCard={handleSubmitRemoveCard}
-          handleSubmitChangeProfilePic={handleSubmitChangeProfilePic}
-          setClassVisible={setClassVisible()}
-          txtErr={txtErr}
-        />
-      )}
-      {formSetting.type === "img" && (
-        <section
-          className={`popup-box popup-box_type_${formSetting.type}} ${
-            isPopupOpen ? "popup-box_visible" : ""
-          }`}
-          onMouseDown={handlePopupMouseDown}
-        >
-          <div className="popup-box__container popup-box__container_type_img">
-            <button
-              name="img"
-              onClick={closePopup}
-              type="button"
-              className="popup-box__close-button popup-box__close-button_type_img button-modifier"
-            ></button>
-            <div className="popup-box__wrapper popup-box__wrapper_type_img">
-              <img
-                src={formSetting.link ? formSetting.link : errImg}
-                className="popup-box__img"
-                alt={`A larger photo of: ${
-                  formSetting.title ? formSetting.title : txtErr
-                }`}
-              />
-              <p className="popup-box__img-title">
-                ${formSetting.title ? formSetting.title : txtErr}
-              </p>
-            </div>
+      <PopupWithForm
+        handlePopupMouseDown={handlePopupMouseDown}
+        formSetting={formSetting}
+        inputVals={inputVals}
+        onChangeInput={onChangeInput}
+        isPopupOpen={isPopupOpen}
+        closePopup={closePopup}
+        setInputVal={setInputVals}
+        handleSubmitAddItem={handleSubmitAddItem}
+        handleSubmitEditProfile={handleSubmitEditProfile}
+        handleSubmitRemoveCard={handleSubmitRemoveCard}
+        handleSubmitChangeProfilePic={handleSubmitChangeProfilePic}
+        setClassVisible={setClassVisible}
+        txtErr={txtErr}
+      />
+
+      <section
+        className={`popup-box popup-box_type_img ${
+          isPopupOpen && formSetting.type === "img" ? "popup-box_visible" : ""
+        }`}
+        onMouseDown={handlePopupMouseDown}
+      >
+        <div className="popup-box__container popup-box__container_type_img">
+          <button
+            name="img"
+            onClick={closePopup}
+            type="button"
+            className="popup-box__close-button popup-box__close-button_type_img button-modifier"
+          ></button>
+          <div className="popup-box__wrapper popup-box__wrapper_type_img">
+            <img
+              src={formSetting.link ? formSetting.link : errImg}
+              className="popup-box__img"
+              alt={`A larger photo of: ${
+                formSetting.title ? formSetting.title : txtErr
+              }`}
+            />
+            <p className="popup-box__img-title">
+              ${formSetting.title ? formSetting.title : txtErr}
+            </p>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
     </>
   );
 };
