@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {AddPlacesForm} from "./PopupForm/AddPlacesForm.js";
 import {EditProfileForm} from "./PopupForm/EditProfileForm.js";
 import {EditAvatarForm} from "./PopupForm/EditAvatarForm.js";
@@ -16,6 +16,29 @@ export const PopupWithForm = ({
   isPopupOpen,
   handleSubmitRemoveCard
 }) => {
+  const [isValidInput, setValidInput] = useState(false);
+  const [validMsg, setValidMsg] = useState({});
+
+  useEffect(() => {
+    if (!isPopupOpen) setValidMsg({});
+    else {
+      const isFormVaild =
+        inputVals.firstInputVal &&
+        inputVals.secInputVal &&
+        !Object.values(validMsg).some((val) => Boolean(val));
+      setValidInput(isFormVaild || false);
+    }
+  }, [inputVals, isPopupOpen]);
+  const onSetVaildMsg = (inputVal, msg) => {
+    setValidMsg({
+      ...validMsg,
+      [inputVal]: msg
+    });
+  };
+  const handleInputChange = (inputName, e) => {
+    onChangeInput(inputName, e.target.value);
+    onSetVaildMsg(inputName, e.target.validationMessage);
+  };
   const setInputElem = () => {
     switch (type) {
       case "add-item":
@@ -23,9 +46,11 @@ export const PopupWithForm = ({
           <AddPlacesForm
             handleSubmitAddItem={handleSubmitAddItem}
             inputVals={inputVals}
-            onChangeInput={onChangeInput}
             btnSetting={btnSetting}
             type={type}
+            isValidInput={isValidInput}
+            validMsg={validMsg}
+            handleInputChange={handleInputChange}
           />
         );
       case "profile-edit":
@@ -33,9 +58,11 @@ export const PopupWithForm = ({
           <EditProfileForm
             handleSubmitEditProfile={handleSubmitEditProfile}
             inputVals={inputVals}
-            onChangeInput={onChangeInput}
             btnSetting={btnSetting}
             type={type}
+            isValidInput={isValidInput}
+            validMsg={validMsg}
+            handleInputChange={handleInputChange}
           />
         );
       case "change-profile-pic":
@@ -43,9 +70,11 @@ export const PopupWithForm = ({
           <EditAvatarForm
             handleSubmitChangeProfilePic={handleSubmitChangeProfilePic}
             inputVals={inputVals}
-            onChangeInput={onChangeInput}
             btnSetting={btnSetting}
             type={type}
+            isValidInput={isValidInput}
+            validMsg={validMsg}
+            handleInputChange={handleInputChange}
           />
         );
       case "confirm":
@@ -71,6 +100,7 @@ export const PopupWithForm = ({
         return <div>{txtErr}</div>;
     }
   };
+
   return (
     <div
       className={`popup-box popup-box_type_${type} ${

@@ -1,12 +1,12 @@
-import { apiConfing } from "../utils/config.js";
-const { baseUrl, headers } = apiConfing;
+import {apiConfing} from "../utils/config.js";
+const {baseUrl, headers} = apiConfing;
 
 const _onHttpRequest = async (url, method, data) => {
   const fullUrl = `${baseUrl}${url}`;
   const res = await fetch(fullUrl, {
     method,
     headers: headers,
-    body: JSON.stringify(data),
+    body: JSON.stringify(data)
   });
   if (res.ok) {
     return res.json();
@@ -23,11 +23,11 @@ const _getInitialCards = () => {
 export const getInitInfo = () => {
   return Promise.all([_getInitialCards(), _getUserInfo()]);
 };
-export const setUserInfo = ({ name, about }) => {
-  return _onHttpRequest("users/me", "PATCH", { name, about });
+export const setUserInfo = ({name, about}) => {
+  return _onHttpRequest("users/me", "PATCH", {name, about});
 };
-export const addNewCard = ({ name, link }) => {
-  return _onHttpRequest("cards", "POST", { name, link });
+export const addNewCard = ({name, link}) => {
+  return _onHttpRequest("cards", "POST", {name, link});
 };
 export const onRemoveItem = (id) => {
   return _onHttpRequest(`cards/${id}`, "DELETE");
@@ -38,6 +38,6 @@ export const addItemLike = (id) => {
 export const removeItemLike = (id) => {
   return _onHttpRequest(`cards/likes/${id}`, "DELETE");
 };
-export const onUpdateProfilePic = ({ avatar }) => {
-  return _onHttpRequest("users/me/avatar", "PATCH", { avatar });
+export const onUpdateProfilePic = ({avatar}) => {
+  return _onHttpRequest("users/me/avatar", "PATCH", {avatar});
 };

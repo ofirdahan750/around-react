@@ -7,7 +7,6 @@ export const PopupImage = ({
   txtErr,
   handlePopupMouseDown
 }) => {
-  console.log(title);
   return (
     <section
       className={`popup-box popup-box_type_img ${

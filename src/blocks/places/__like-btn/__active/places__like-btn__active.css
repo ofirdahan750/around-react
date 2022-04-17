@@ -1,6 +1,6 @@
-.places__like-btn__active::before {
+.places__like-btn__active::after {
   content: url("../../../../images/places/like_btn_svg/like_btn_active.svg");
 }
-.places__like-btn__active:hover::before {
+.places__like-btn__active:hover::after {
   content: url("../../../../images/places/like_btn_svg/like_btn_active.svg");
 }

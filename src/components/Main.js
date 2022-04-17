@@ -33,6 +33,7 @@ export const Main = () => {
     secInputVal: ""
   });
   const [isPopupOpen, setPopupOpen] = useState(false);
+
   useEffect(() => {
     //Init only
     setLoading(true);
@@ -42,8 +43,8 @@ export const Main = () => {
         setCards(cardItemsArr);
         setUserStateInfo(userInfoRes);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.log(`Error: ${error}`);
         setCards(loadingInitError.card);
         setUserStateInfo(loadingInitError.useInfo);
       });
@@ -52,14 +53,6 @@ export const Main = () => {
     //Set and Remove Popups
     if (isPopupOpen) {
       document.addEventListener("keydown", handleEscClose);
-      if (formSetting.type === "profile-edit") {
-        setInputVals({
-          firstInputVal: userInfo.name,
-          secInputVal: userInfo.about
-        });
-      } else {
-        setInputVals({firstInputVal: "", secInputVal: ""});
-      }
     } else {
       document.removeEventListener("keydown", handleEscClose);
       setTimeout(() => {
@@ -212,7 +205,10 @@ export const Main = () => {
           <div
             className="profile__avatar-cover"
             style={{backgroundImage: `url(${userInfo.avatar || spinnerGif})`}}
-            onClick={() => openPopup("EditAvatar")}
+            onClick={() => {
+              openPopup("EditAvatar");
+              onChangeInput("secInputVal", "Fake Value"); //For Validation to works
+            }}
           >
             <button
               className="profile__avatar-btn button-modifier"
@@ -230,7 +226,13 @@ export const Main = () => {
             <button
               type="button"
               className="profile__edit-btn-cover button-modifier"
-              onClick={() => openPopup("editProfile")}
+              onClick={() => {
+                openPopup("editProfile");
+                setInputVals({
+                  firstInputVal: userInfo.name,
+                  secInputVal: userInfo.about
+                });
+              }}
             >
               <img
                 src={profileEditBtnSvg}
@@ -279,7 +281,6 @@ export const Main = () => {
         onChangeInput={onChangeInput}
         isPopupOpen={isPopupOpen}
         closePopup={closePopup}
-        setInputVal={setInputVals}
         handleSubmitAddItem={handleSubmitAddItem}
         handleSubmitEditProfile={handleSubmitEditProfile}
         handleSubmitRemoveCard={handleSubmitRemoveCard}
