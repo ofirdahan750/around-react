@@ -3,8 +3,8 @@ import profilePicBtnSvg from "../images/profile/profile__pic-edit.svg";
 import profileAddBtnSvg from "../images/profile/profile__button-plus.svg";
 import profileEditBtnSvg from "../images/profile/profile__button-edit.svg";
 import PopupWithForm from "./Popups/PopupWithFrom.js";
-import PopupImage from "./Popups/PopupImage.js";
-import Cards from "./Cards.js";
+import ImagePopup from "./Popups/ImagePopup.js";
+import Card from "./Card.js";
 import React, {useCallback, useEffect, useState} from "react";
 import {
   loadingInitState,
@@ -260,7 +260,7 @@ const Main = () => {
           <ul className="places__grid-container">
             {cards.map((card) => {
               return (
-                <Cards
+                <Card
                   card={card}
                   key={card._id}
                   userId={userInfo._id}
@@ -287,7 +287,7 @@ const Main = () => {
         handleSubmitChangeProfilePic={handleSubmitChangeProfilePic}
         txtErr={txtErr}
       />
-      <PopupImage
+      <ImagePopup
         formSetting={formSetting}
         isPopupOpen={isPopupOpen}
         closePopup={closePopup}

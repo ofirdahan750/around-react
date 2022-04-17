@@ -77,6 +77,7 @@ const PopupWithForm = ({
             handleInputChange={handleInputChange}
           />
         );
+
       case "confirm":
         return (
           <fieldset className="popup-box__fieldset">
@@ -91,10 +92,8 @@ const PopupWithForm = ({
             </button>
           </fieldset>
         );
-
       case "init":
         return <div>Loading...</div>;
-        break;
 
       default:
         return <div>{txtErr}</div>;
