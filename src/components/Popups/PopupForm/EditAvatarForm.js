@@ -1,6 +1,6 @@
 import React from "react";
 
-export const EditAvatarForm = ({
+const EditAvatarForm = ({
   handleInputChange,
   inputVals,
   type,
@@ -41,3 +41,4 @@ export const EditAvatarForm = ({
     </form>
   );
 };
+export default EditAvatarForm;

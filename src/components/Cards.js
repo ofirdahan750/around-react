@@ -1,5 +1,5 @@
 import removeBtn from "../images/places/remove_btn.svg";
-export const Cards = ({
+const Cards = ({
   card,
   userId,
   spinnerGif,
@@ -58,3 +58,4 @@ export const Cards = ({
     </li>
   );
 };
+export default Cards;

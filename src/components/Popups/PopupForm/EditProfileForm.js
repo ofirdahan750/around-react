@@ -1,5 +1,5 @@
 import React from "react";
-export const EditProfileForm = ({
+const EditProfileForm = ({
   handleSubmitEditProfile,
   handleInputChange,
   inputVals,
@@ -56,3 +56,4 @@ export const EditProfileForm = ({
     </form>
   );
 };
+export default EditProfileForm;

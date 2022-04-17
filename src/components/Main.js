@@ -2,9 +2,9 @@ import spinnerGif from "../images/api/spinner_svg.svg";
 import profilePicBtnSvg from "../images/profile/profile__pic-edit.svg";
 import profileAddBtnSvg from "../images/profile/profile__button-plus.svg";
 import profileEditBtnSvg from "../images/profile/profile__button-edit.svg";
-import {PopupWithForm} from "./Popups/PopupWithFrom.js";
-import {PopupImage} from "./Popups/PopupImage.js";
-import {Cards} from "./Cards.js";
+import PopupWithForm from "./Popups/PopupWithFrom.js";
+import PopupImage from "./Popups/PopupImage.js";
+import Cards from "./Cards.js";
 import React, {useCallback, useEffect, useState} from "react";
 import {
   loadingInitState,
@@ -23,7 +23,7 @@ import {
   setUserInfo
 } from "../utils/Api";
 
-export const Main = () => {
+const Main = () => {
   const [cards, setCards] = useState(loadingInitState.card);
   const [userInfo, setUserStateInfo] = useState(loadingInitState.useInfo);
   const [isLoading, setLoading] = useState(true);
@@ -298,3 +298,4 @@ export const Main = () => {
     </>
   );
 };
+export default Main;

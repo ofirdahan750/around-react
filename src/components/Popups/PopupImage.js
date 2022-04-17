@@ -1,5 +1,5 @@
 import React from "react";
-export const PopupImage = ({
+const PopupImage = ({
   formSetting: {type, link, title},
   isPopupOpen,
   closePopup,
@@ -33,3 +33,4 @@ export const PopupImage = ({
     </section>
   );
 };
+export default PopupImage;

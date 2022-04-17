@@ -1,5 +1,5 @@
 import React from "react";
-export const AddPlacesForm = ({
+const AddPlacesForm = ({
   handleSubmitAddItem,
   handleInputChange,
   inputVals,
@@ -53,3 +53,4 @@ export const AddPlacesForm = ({
     </form>
   );
 };
+export default AddPlacesForm;

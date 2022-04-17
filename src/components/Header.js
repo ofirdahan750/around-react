@@ -1,6 +1,6 @@
 import logo from "../images/header/header__logo.svg";
 
-export const Header = () => {
+const Header = () => {
   return (
     <header className="header">
       <img
@@ -11,3 +11,4 @@ export const Header = () => {
     </header>
   );
 };
+export default Header

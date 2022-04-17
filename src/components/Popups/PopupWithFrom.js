@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react";
-import {AddPlacesForm} from "./PopupForm/AddPlacesForm.js";
-import {EditProfileForm} from "./PopupForm/EditProfileForm.js";
-import {EditAvatarForm} from "./PopupForm/EditAvatarForm.js";
+import AddPlacesForm from "./PopupForm/AddPlacesForm.js";
+import EditProfileForm from "./PopupForm/EditProfileForm.js";
+import EditAvatarForm from "./PopupForm/EditAvatarForm.js";
 
-export const PopupWithForm = ({
+const PopupWithForm = ({
   txtErr,
   handlePopupMouseDown,
   formSetting: {type, btnSetting, heading},
@@ -123,3 +123,4 @@ export const PopupWithForm = ({
     </div>
   );
 };
+export default PopupWithForm;

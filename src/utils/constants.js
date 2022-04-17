@@ -1,7 +1,6 @@
 import {getRandomString} from "./utils";
 import spinnerGif from "../images/api/spinner_svg.svg";
 import errImg from "../images/api/error_svg.svg";
-const formValidators = {};
 const txtErr = "Something went wrong, please try again later ";
 
 const loadingInitState = {
@@ -62,11 +61,4 @@ const formSettingState = {
   }
 };
 
-export {
-  formValidators,
-  txtErr,
-  loadingInitError,
-  loadingInitState,
-  formSettingState,
-  errImg
-};
+export {txtErr, loadingInitError, loadingInitState, formSettingState, errImg};
