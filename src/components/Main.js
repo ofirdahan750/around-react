@@ -2,7 +2,10 @@ import spinnerGif from "../images/api/spinner_svg.svg";
 import profilePicBtnSvg from "../images/profile/profile__pic-edit.svg";
 import profileAddBtnSvg from "../images/profile/profile__button-plus.svg";
 import profileEditBtnSvg from "../images/profile/profile__button-edit.svg";
-import PopupWithForm from "./Popups/PopupWithFrom.js";
+import AddPlaceForm from "./Popups/PopupForm/AddPlacesForm.js";
+import EditProfileForm from "./Popups/PopupForm/EditProfileForm.js";
+import EditAvatarForm from "./Popups/PopupForm/EditAvatarForm.js";
+import ConfirmForm from "./Popups/PopupForm/ConfirmForm.js";
 import ImagePopup from "./Popups/ImagePopup.js";
 import Card from "./Card.js";
 import React, {useCallback, useEffect, useState} from "react";
@@ -10,7 +13,6 @@ import {
   loadingInitState,
   loadingInitError,
   txtErr,
-  formSettingState,
   errImg
 } from "../utils/constants.js";
 import {
@@ -23,23 +25,52 @@ import {
   setUserInfo
 } from "../utils/Api";
 
-const Main = () => {
+const Main = ({
+  openPopup,
+  closePopup,
+  isPopupOpen,
+  isLoading,
+  setIsLoading,
+  formSettingStates,
+  formSetting,
+  setFormSetting
+}) => {
   const [cards, setCards] = useState(loadingInitState.card);
-  const [userInfo, setUserStateInfo] = useState(loadingInitState.useInfo);
-  const [isLoading, setLoading] = useState(true);
-  const [formSetting, setFormsSetting] = useState(formSettingState.init);
+  const [userStateInfo, setUserStateInfo] = useState(loadingInitState.useInfo);
   const [inputVals, setInputVals] = useState({
     firstInputVal: "",
     secInputVal: ""
   });
-  const [isPopupOpen, setPopupOpen] = useState(false);
+  const [isValidInput, setValidInput] = useState(false);
+  const [validMsg, setValidMsg] = useState({});
 
   useEffect(() => {
+    if (!isPopupOpen) setValidMsg({});
+    else {
+      const isAllInputsFilled = Object.values(inputVals).every((v) => v);
+      const isVaildMsgActive = !Object.values(validMsg).some((val) =>
+        Boolean(val)
+      );
+      const isFormVaild = isAllInputsFilled && isVaildMsgActive;
+      setValidInput(isFormVaild || false);
+    }
+  }, [inputVals, isPopupOpen]);
+  const onSetVaildMsg = (inputVal, msg) => {
+    setValidMsg({
+      ...validMsg,
+      [inputVal]: msg
+    });
+  };
+  const handleInputChange = (inputName, e) => {
+    onChangeInput(inputName, e.target.value);
+    onSetVaildMsg(inputName, e.target.validationMessage);
+  };
+  useEffect(() => {
     //Init only
-    setLoading(true);
+    setIsLoading(true);
     getInitInfo()
       .then(([cardItemsArr, userInfoRes]) => {
-        setLoading(false);
+        setIsLoading(false);
         setCards(cardItemsArr);
         setUserStateInfo(userInfoRes);
       })
@@ -49,44 +80,30 @@ const Main = () => {
         setUserStateInfo(loadingInitError.useInfo);
       });
   }, []);
+
   useEffect(() => {
     //Set and Remove Popups
     if (isPopupOpen) {
       document.addEventListener("keydown", handleEscClose);
     } else {
       document.removeEventListener("keydown", handleEscClose);
-      setTimeout(() => {
-        setInputVals({firstInputVal: "", secInputVal: ""});
-      }, 90);
     }
   }, [isPopupOpen]);
-
-  const closePopup = () => {
-    onHandleBtnText("Close...", true);
-    setTimeout(() => {
-      setPopupOpen(false);
-    }, 1);
-  };
-  const openPopup = (clickedPopUpSetting) => {
-    if (isLoading) return;
-    setPopupOpen(true);
-    setFormsSetting(formSettingState[clickedPopUpSetting]);
-  };
   const onHandleBtnText = (btnTxt = "Saving...", isDisable = true, error) => {
     if (error) {
       console.log(`Error: ${error}`);
-      setFormsSetting((prevState) => ({
+      setFormSetting((prevState) => ({
         ...prevState,
         btnSetting: {txt: txtErr, isDisable: true}
       }));
       setTimeout(() => {
-        setFormsSetting((prevState) => ({
+        setFormSetting((prevState) => ({
           ...prevState,
           btnSetting: {txt: btnTxt, isDisable: false}
         }));
       }, 1100);
     } else {
-      setFormsSetting((prevState) => ({
+      setFormSetting((prevState) => ({
         ...prevState,
         btnSetting: {txt: btnTxt, isDisable: isDisable}
       }));
@@ -96,8 +113,8 @@ const Main = () => {
     e.preventDefault();
     onHandleBtnText();
     addNewCard({
-      name: inputVals.firstInputVal,
-      link: inputVals.secInputVal
+      name: inputVals.titleInput,
+      link: inputVals.urlInput
     })
       .then((res) => {
         onHandleBtnText("Place added successfully!", true);
@@ -113,7 +130,7 @@ const Main = () => {
   const handleSubmitEditProfile = (e) => {
     e.preventDefault();
     onHandleBtnText();
-    setUserInfo({name: inputVals.firstInputVal, about: inputVals.secInputVal})
+    setUserInfo({name: inputVals.nameInput, about: inputVals.aboutInput})
       .then((res) => {
         onHandleBtnText("Profile edited successfully!", true);
         setUserStateInfo(res);
@@ -143,12 +160,12 @@ const Main = () => {
   const handleSubmitChangeProfilePic = (e) => {
     e.preventDefault();
     onHandleBtnText();
-    onUpdateProfilePic({avatar: inputVals.firstInputVal})
+    onUpdateProfilePic({avatar: inputVals.urlInput})
       .then(() => {
         onHandleBtnText("Profile Picture modified successfully!", true);
         setUserStateInfo((prevState) => ({
           ...prevState,
-          avatar: inputVals.firstInputVal
+          avatar: inputVals.urlInput
         }));
         setTimeout(() => {
           closePopup();
@@ -204,10 +221,12 @@ const Main = () => {
         <section className="profile">
           <div
             className="profile__avatar-cover"
-            style={{backgroundImage: `url(${userInfo.avatar || spinnerGif})`}}
+            style={{
+              backgroundImage: `url(${userStateInfo.avatar || spinnerGif})`
+            }}
             onClick={() => {
-              openPopup("EditAvatar");
-              onChangeInput("secInputVal", "Fake Value"); //For Validation to works
+              openPopup(formSettingStates.EDIT_AVATAR.name);
+              setInputVals({urlInput: ""});
             }}
           >
             <button
@@ -222,15 +241,17 @@ const Main = () => {
             </button>
           </div>
           <div className="profile__info">
-            <h1 className="profile__name">{userInfo.name || "Loading..."}</h1>
+            <h1 className="profile__name">
+              {userStateInfo.name || "Loading..."}
+            </h1>
             <button
               type="button"
               className="profile__edit-btn-cover button-modifier"
               onClick={() => {
-                openPopup("editProfile");
+                openPopup(formSettingStates.EDIT_PROFILE.name);
                 setInputVals({
-                  firstInputVal: userInfo.name,
-                  secInputVal: userInfo.about
+                  nameInput: userStateInfo.name,
+                  aboutInput: userStateInfo.about
                 });
               }}
             >
@@ -241,13 +262,16 @@ const Main = () => {
               />
             </button>
             <p className="profile__about-me">
-              {userInfo.about || "Loading..."}
+              {userStateInfo.about || "Loading..."}
             </p>
           </div>
           <button
             type="button"
             className="profile__add-btn-cover button-modifier"
-            onClick={() => openPopup("addItem")}
+            onClick={() => {
+              openPopup(formSettingStates.ADD_ITEM.name);
+              setInputVals({titleInput: "", urlInput: ""});
+            }}
           >
             <img
               src={profileAddBtnSvg}
@@ -263,30 +287,59 @@ const Main = () => {
                 <Card
                   card={card}
                   key={card._id}
-                  userId={userInfo._id}
+                  userId={userStateInfo._id}
                   spinnerGif={spinnerGif}
                   handleToggleLikedBtn={handleToggleLikedBtn}
                   openPopup={openPopup}
-                  setFormsSetting={setFormsSetting}
+                  formSettingStates={formSettingStates}
+                  setFormSetting={setFormSetting}
                 />
               );
             })}
           </ul>
         </section>
       </main>
-      <PopupWithForm
-        handlePopupMouseDown={handlePopupMouseDown}
+      <AddPlaceForm
+        handleSubmit={handleSubmitAddItem}
         formSetting={formSetting}
-        inputVals={inputVals}
-        onChangeInput={onChangeInput}
         isPopupOpen={isPopupOpen}
         closePopup={closePopup}
-        handleSubmitAddItem={handleSubmitAddItem}
-        handleSubmitEditProfile={handleSubmitEditProfile}
-        handleSubmitRemoveCard={handleSubmitRemoveCard}
-        handleSubmitChangeProfilePic={handleSubmitChangeProfilePic}
-        txtErr={txtErr}
+        handlePopupMouseDown={handlePopupMouseDown}
+        validMsg={validMsg}
+        isValidInput={isValidInput}
+        inputVals={inputVals}
+        handleInputChange={handleInputChange}
       />
+      <EditProfileForm
+        handleSubmit={handleSubmitEditProfile}
+        formSetting={formSetting}
+        isPopupOpen={isPopupOpen}
+        closePopup={closePopup}
+        handlePopupMouseDown={handlePopupMouseDown}
+        validMsg={validMsg}
+        isValidInput={isValidInput}
+        inputVals={inputVals}
+        handleInputChange={handleInputChange}
+      />
+      <EditAvatarForm
+        handleSubmit={handleSubmitChangeProfilePic}
+        formSetting={formSetting}
+        isPopupOpen={isPopupOpen}
+        closePopup={closePopup}
+        handlePopupMouseDown={handlePopupMouseDown}
+        validMsg={validMsg}
+        isValidInput={isValidInput}
+        inputVals={inputVals}
+        handleInputChange={handleInputChange}
+      />
+      <ConfirmForm
+        handleSubmit={handleSubmitRemoveCard}
+        formSetting={formSetting}
+        isPopupOpen={isPopupOpen}
+        closePopup={closePopup}
+        handlePopupMouseDown={handlePopupMouseDown}
+      />
+
       <ImagePopup
         formSetting={formSetting}
         isPopupOpen={isPopupOpen}

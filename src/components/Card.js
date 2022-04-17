@@ -5,21 +5,23 @@ const Card = ({
   spinnerGif,
   handleToggleLikedBtn,
   openPopup,
-  setFormsSetting
+  formSettingStates: {REMOVE_CARD, POPUP_IMAGE},
+  setFormSetting
 }) => {
   const {name, link, likes, owner, _id} = card;
   const isLiked = likes.find((like) => like._id === userId);
   const handleOpenRemoveCard = (e) => {
     e.stopPropagation();
-    openPopup("confirmRemoveOpen");
-    setFormsSetting((prevState) => ({
+    openPopup(REMOVE_CARD.name);
+
+    setFormSetting((prevState) => ({
       ...prevState,
       cardId: _id
     }));
   };
   const openImagePopup = () => {
-    openPopup("imagePopup");
-    setFormsSetting((prevState) => ({
+    openPopup(POPUP_IMAGE.name);
+    setFormSetting((prevState) => ({
       ...prevState,
       title: name,
       link
