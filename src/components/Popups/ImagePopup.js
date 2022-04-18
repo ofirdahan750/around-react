@@ -1,23 +1,22 @@
 import React from "react";
 const ImagePopup = ({
-  formSetting: {type, link, title},
-  isPopupOpen,
-  closePopup,
+  selectedCard: {name, link, isOpen},
+  closeAllPopup,
+  handlePopupMouseDown,
   errImg,
-  txtErr,
-  handlePopupMouseDown
+  txtErr
 }) => {
   return (
     <section
       className={`popup-box popup-box_type_img ${
-        isPopupOpen && type === "img" ? "popup-box_visible" : ""
+        isOpen ? "popup-box_visible" : ""
       }`}
       onMouseDown={handlePopupMouseDown}
     >
       <div className="popup-box__container popup-box__container_type_img">
         <button
           name="img"
-          onClick={closePopup}
+          onClick={closeAllPopup}
           type="button"
           className="popup-box__close-button popup-box__close-button_type_img button-modifier"
         ></button>
@@ -25,9 +24,9 @@ const ImagePopup = ({
           <img
             src={link || errImg}
             className="popup-box__img"
-            alt={`A larger photo of: ${title || txtErr}`}
+            alt={`A larger photo of: ${name || txtErr}`}
           />
-          <p className="popup-box__img-title">{title || txtErr}</p>
+          <p className="popup-box__img-title">{name || txtErr}</p>
         </div>
       </div>
     </section>

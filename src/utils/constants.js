@@ -64,9 +64,9 @@ const formSettingStates = {
     type: "img",
     title: "",
     btnSetting: {txt: "", isDisable: false},
-    link: ""
+    link: "",
+    isOpen: false
   }
 };
-
 
 export {txtErr, loadingInitError, loadingInitState, formSettingStates, errImg};

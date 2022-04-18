@@ -1,18 +1,17 @@
 import React from "react";
 const PopupWithForm = ({
   children,
-  type,
-  heading,
-  isPopupOpen,
-  closePopup,
+  handleSubmit,
+  formSetting: {type, btnSetting, heading},
   handlePopupMouseDown,
-  currType
+  isOpen,
+  isValidInput,
+  closeAllPopup
 }) => {
-  const ifThisForm = type === currType && isPopupOpen && type !== "img";
   return (
     <div
-      className={`popup-box popup-box_type${ifThisForm ? `_${type}` : ""}${
-        ifThisForm ? " popup-box_visible" : ""
+      className={`popup-box popup-box_type_${type !== "img" ? type : ""} ${
+        isOpen ? "popup-box_visible" : ""
       }`}
       onMouseDown={handlePopupMouseDown}
       onContextMenu={(e) => e.preventDefault()}
@@ -21,11 +20,24 @@ const PopupWithForm = ({
         <button
           type="button"
           className="popup-box__close-button button-modifier"
-          onClick={closePopup}
+          onClick={closeAllPopup}
         ></button>
         <div className="popup-box__wrapper">
           <h2 className="popup-box__heading">{heading}</h2>
-          {children}
+          <form className="popup-box__form" noValidate onSubmit={handleSubmit}>
+            <fieldset className="popup-box__fieldset">
+              {children}
+              <button
+                className={`popup-box__submit-button button-modifier ${
+                  !isValidInput ? "popup-box__submit-button_inactive" : ""
+                }`}
+                type="submit"
+                disabled={btnSetting.isDisable || !isValidInput}
+              >
+                {btnSetting.txt || "Loading..."}
+              </button>
+            </fieldset>
+          </form>
         </div>
       </div>
     </div>
