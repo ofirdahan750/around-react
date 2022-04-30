@@ -6,7 +6,8 @@ const PopupWithForm = ({
   handlePopupMouseDown,
   isOpen,
   isValidInput,
-  closeAllPopup
+  closeAllPopup,
+  inputVals
 }) => {
   return (
     <div
