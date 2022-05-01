@@ -20,24 +20,33 @@ const _getUserInfo = () => {
 const _getInitialCards = () => {
   return _onHttpRequest("cards", "GET");
 };
-export const getInitInfo = () => {
+const getInitInfo = () => {
   return Promise.all([_getInitialCards(), _getUserInfo()]);
 };
-export const setUserInfo = ({name, about}) => {
+const setUserInfo = ({name, about}) => {
   return _onHttpRequest("users/me", "PATCH", {name, about});
 };
-export const addNewCard = ({name, link}) => {
+const addNewCard = ({name, link}) => {
   return _onHttpRequest("cards", "POST", {name, link});
 };
-export const onRemoveItem = (id) => {
+const onRemoveItem = (id) => {
   return _onHttpRequest(`cards/${id}`, "DELETE");
 };
-export const addItemLike = (id) => {
+const addItemLike = (id) => {
   return _onHttpRequest(`cards/likes/${id}`, "PUT");
 };
-export const removeItemLike = (id) => {
+const removeItemLike = (id) => {
   return _onHttpRequest(`cards/likes/${id}`, "DELETE");
 };
-export const onUpdateProfilePic = ({avatar}) => {
+const onUpdateProfilePic = ({avatar}) => {
   return _onHttpRequest("users/me/avatar", "PATCH", {avatar});
+};
+export default {
+  getInitInfo,
+  setUserInfo,
+  addNewCard,
+  onRemoveItem,
+  addItemLike,
+  removeItemLike,
+  onUpdateProfilePic
 };

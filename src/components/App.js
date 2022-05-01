@@ -11,15 +11,7 @@ import {
   txtErr,
   errImg
 } from "../utils/constants.js";
-import {
-  addNewCard,
-  getInitInfo,
-  onUpdateProfilePic,
-  setUserInfo,
-  addItemLike,
-  removeItemLike,
-  onRemoveItem
-} from "../utils/Api";
+import Api from "../utils/Api";
 import Header from "./Header.js";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
@@ -36,7 +28,15 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(loadingInitState.useInfo);
   const [isValidInput, setValidInput] = useState(false);
   const [validMsg, setValidMsg] = useState({});
-
+  const {
+    addNewCard,
+    getInitInfo,
+    onUpdateProfilePic,
+    setUserInfo,
+    addItemLike,
+    removeItemLike,
+    onRemoveItem
+  } = Api;
   const handleMsgVaild = (inputVals) => {
     if (
       !isEditProfilePopupOpen &&
