@@ -29,8 +29,9 @@ const PopupWithForm = ({
               {children}
               <button
                 className={`popup-box__submit-button button-modifier ${
-                  type === "confirm" &&
-                  "popup-box__submit-button_type_delete-confirm"
+                  type === "confirm"
+                    ? "popup-box__submit-button_type_delete-confirm"
+                    : ""
                 } ${!isValidInput ? "popup-box__submit-button_inactive" : ""}`}
                 type="submit"
                 disabled={btnSetting.isDisable || !isValidInput}
