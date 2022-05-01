@@ -6,12 +6,11 @@ const PopupWithForm = ({
   handlePopupMouseDown,
   isOpen,
   isValidInput,
-  closeAllPopup,
-  inputVals
+  closeAllPopup
 }) => {
   return (
     <div
-      className={`popup-box popup-box_type_${type !== "img" ? type : ""} ${
+      className={`popup-box popup-box_type_${isOpen ? type : ""} ${
         isOpen ? "popup-box_visible" : ""
       }`}
       onMouseDown={handlePopupMouseDown}

@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useState} from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 import ImagePopup from "./Popups/ImagePopup.js";
-import EditProfilePopup from "./Popups/EditProfilePopup.js";
+import EditProfilePopup from "./Popups/WithForms/EditProfilePopup.js";
+import EditAvatarPopup from "./Popups/WithForms/EditAvatarPopup.js";
 import {
   loadingInitState,
   loadingInitError,
@@ -21,7 +22,7 @@ import Header from "./Header.js";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
 import {formSettingStates} from "../utils/constants.js";
-import PopupWithForm from "./Popups/PopupWithFrom.js";
+import PopupWithForm from "./Popups/WithForms/PopupWithFrom.js";
 import {updateObjInArr} from "../utils/utils";
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -39,7 +40,7 @@ const App = () => {
   const [isValidInput, setValidInput] = useState(false);
   const [validMsg, setValidMsg] = useState({});
 
- const handleMsgVaild = (inputVals) => {
+  const handleMsgVaild = (inputVals) => {
     if (
       !isEditProfilePopupOpen &&
       !isAddPlacePopupOpen &&
@@ -120,10 +121,6 @@ const App = () => {
     if (isLoading) return;
     setIsEditProfilePopupOpen(true);
     setFormSetting(formSettingStates.EDIT_PROFILE);
-    // setInputVals({
-    //   nameInput: currentUser.name,
-    //   aboutInput: currentUser.about
-    // });
   };
 
   const handleAddElementClick = () => {
@@ -224,7 +221,7 @@ const App = () => {
         onHandleBtnText("Create", true, err);
       });
   };
-  const handleSubmitEditProfile = (e,{name,description}) => {
+  const handleSubmitEditProfile = (e, {name, description}) => {
     e.preventDefault();
     onHandleBtnText();
     setUserInfo({name, about: description})
@@ -240,15 +237,15 @@ const App = () => {
       });
   };
 
-  const handleSubmitChangeProfilePic = (e) => {
+  const handleSubmitChangeProfilePic = (e, avatarInput) => {
     e.preventDefault();
     onHandleBtnText();
-    onUpdateProfilePic({avatar: inputVals.urlInput})
+    onUpdateProfilePic({avatar: avatarInput})
       .then(() => {
         onHandleBtnText("Profile Picture modified successfully!", true);
         setCurrentUser((prevState) => ({
           ...prevState,
-          avatar: inputVals.urlInput
+          avatar: avatarInput
         }));
         setTimeout(() => {
           closeAllPopup();
@@ -330,70 +327,17 @@ const App = () => {
           validMsg={validMsg}
           handleMsgVaild={handleMsgVaild}
         />
-        {/* <PopupWithForm
-          handleSubmit={handleSubmitEditProfile}
-          handlePopupMouseDown={handlePopupMouseDown}
-          formSetting={formSetting}
-          isOpen={isEditProfilePopupOpen}
-          isValidInput={isValidInput}
-          closeAllPopup={closeAllPopup}
-        >
-          <input
-            className="popup-box__input popup-box__input_order_first-input"
-            value={inputVals.nameInput || ""}
-            onChange={(e) => {
-              handleInputChange("nameInput", e);
-            }}
-            type="text"
-            placeholder="Enter your name"
-            minLength="2"
-            maxLength="40"
-            required
-          />
-          <span className={`popup-box__input-error`}>
-            {validMsg.nameInput || ""}
-          </span>
-          <input
-            className="popup-box__input popup-box__input_order_second-input"
-            name="about_me"
-            type="text"
-            placeholder="Tell as something about yourself"
-            value={inputVals.aboutInput}
-            onChange={(e) => {
-              handleInputChange("aboutInput", e);
-            }}
-            minLength="2"
-            maxLength="200"
-            required
-          />
-          <span className={`popup-box__input-error`}>
-            {validMsg.aboutInput || ""}
-          </span>
-        </PopupWithForm> */}
-        <PopupWithForm
-          handleSubmit={handleSubmitChangeProfilePic}
-          handlePopupMouseDown={handlePopupMouseDown}
-          formSetting={formSetting}
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
-          isValidInput={isValidInput}
+          handleSubmitChangeProfilePic={handleSubmitChangeProfilePic}
+          formSetting={formSetting}
           closeAllPopup={closeAllPopup}
-        >
-          <input
-            className="popup-box__input popup-box__input_order_first-input"
-            name="img_link"
-            type="url"
-            value={inputVals.urlInput}
-            placeholder="Image link"
-            onChange={(e) => {
-              handleInputChange("urlInput", e);
-            }}
-            required
-          />
-
-          <span className="popup-box__input-error">
-            {validMsg.urlInput || ""}
-          </span>
-        </PopupWithForm>
+          isValidInput={isValidInput}
+          onSetVaildMsg={onSetVaildMsg}
+          validMsg={validMsg}
+          handleMsgVaild={handleMsgVaild}
+          handlePopupMouseDown={handlePopupMouseDown}
+        />
 
         <ImagePopup
           selectedCard={selectedCard}

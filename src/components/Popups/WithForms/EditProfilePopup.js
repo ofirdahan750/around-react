@@ -1,6 +1,6 @@
 import PopupWithForm from "./PopupWithFrom.js";
 import React, {useEffect, useState, useContext} from "react";
-import CurrentUserContext from "../../contexts/CurrentUserContext.js";
+import CurrentUserContext from "../../../contexts/CurrentUserContext.js";
 const EditProfilePopup = ({
   onSetVaildMsg,
   isOpen,
@@ -17,7 +17,7 @@ const EditProfilePopup = ({
   const currentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
-    //set input vals
+    //Set input vals
     if (currentUser.name && currentUser.about) {
       setName(currentUser.name);
       setDescription(currentUser.about);
@@ -28,8 +28,8 @@ const EditProfilePopup = ({
     handleMsgVaild({name, description});
   }, [name, description]);
   const handleSubmit = (e) => {
-    handleSubmitEditProfile(e,{name,description})
-  }
+    handleSubmitEditProfile(e, {name, description});
+  };
   return (
     <PopupWithForm
       isOpen={isOpen}

@@ -8,7 +8,7 @@ const Card = ({
   onCardClick,
   handleToggleLikedBtn
 }) => {
-  const currentUser = React.useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   const isLiked = likes.some((like) => like._id === currentUser._id);
   const openImagePopup = () => {
     onCardClick({name, link});
