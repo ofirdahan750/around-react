@@ -11,7 +11,7 @@ import {
   txtErr,
   errImg
 } from "../utils/constants.js";
-import Api from "../utils/api.js";
+import api from "../utils/api.js";
 import Header from "./Header.js";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
@@ -36,7 +36,7 @@ const App = () => {
     addItemLike,
     removeItemLike,
     onRemoveItem
-  } = Api;
+  } = api;
   const handleMsgVaild = (inputVals) => {
     if (
       !isEditProfilePopupOpen &&
