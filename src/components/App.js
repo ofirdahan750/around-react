@@ -11,7 +11,7 @@ import {
   txtErr,
   errImg
 } from "../utils/constants.js";
-import api from "../utils/api.js";
+import Api from "../utils/api.js";
 import Header from "./Header.js";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
@@ -28,15 +28,7 @@ const App = () => {
   const [currentUser, setCurrentUser] = useState(loadingInitState.useInfo);
   const [isValidInput, setValidInput] = useState(false);
   const [validMsg, setValidMsg] = useState({});
-  const {
-    addNewCard,
-    getInitInfo,
-    onUpdateProfilePic,
-    setUserInfo,
-    addItemLike,
-    removeItemLike,
-    onRemoveItem
-  } = api;
+
   const handleMsgVaild = (inputVals) => {
     if (
       !isEditProfilePopupOpen &&
@@ -63,7 +55,7 @@ const App = () => {
   useEffect(() => {
     //Init only
     setIsLoading(true);
-    getInitInfo()
+    Api.getInitInfo()
       .then(([cardItemsArr, userInfoRes]) => {
         setIsLoading(false);
         setCards(cardItemsArr);
@@ -105,13 +97,13 @@ const App = () => {
   const handleToggleLikedBtn = (isLiked, id) => {
     if (isLoading) return;
     if (!isLiked) {
-      addItemLike(id).then((res) => {
+      Api.addItemLike(id).then((res) => {
         const newState = [...cards];
         newState.find((item) => item._id === id).likes = res.likes;
         setCards(newState);
       });
     } else {
-      removeItemLike(id).then((res) => {
+      Api.removeItemLike(id).then((res) => {
         const newState = [...cards];
         newState.find((item) => item._id === id).likes = res.likes;
         setCards(newState);
@@ -197,7 +189,7 @@ const App = () => {
   const handleSubmitRemoveCard = (e) => {
     e.preventDefault();
     onHandleBtnText();
-    onRemoveItem(formSetting.cardId)
+    Api.onRemoveItem(formSetting.cardId)
       .then(() => {
         onHandleBtnText("Place removed successfully!", true);
         setCards(cards.filter((item) => item._id !== formSetting.cardId));
@@ -213,7 +205,7 @@ const App = () => {
   const handleSubmitAddItem = (e, {imgTitle, imgSrc}) => {
     e.preventDefault();
     onHandleBtnText();
-    addNewCard({
+    Api.addNewCard({
       name: imgTitle,
       link: imgSrc
     })
@@ -231,7 +223,7 @@ const App = () => {
   const handleSubmitEditProfile = (e, {name, description}) => {
     e.preventDefault();
     onHandleBtnText();
-    setUserInfo({name, about: description})
+    Api.setUserInfo({name, about: description})
       .then((res) => {
         onHandleBtnText("Profile edited successfully!", true);
         setCurrentUser(res);
@@ -247,7 +239,7 @@ const App = () => {
   const handleSubmitChangeProfilePic = (e, avatarInput) => {
     e.preventDefault();
     onHandleBtnText();
-    onUpdateProfilePic({avatar: avatarInput})
+    Api.onUpdateProfilePic({avatar: avatarInput})
       .then(() => {
         onHandleBtnText("Profile Picture modified successfully!", true);
         setCurrentUser((prevState) => ({

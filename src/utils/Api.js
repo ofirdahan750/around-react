@@ -1,52 +1,48 @@
-import {apiConfing} from "./config.js";
-const {baseUrl, headers} = apiConfing;
-
-const _onHttpRequest = async (url, method, data) => {
-  const fullUrl = `${baseUrl}${url}`;
-  const res = await fetch(fullUrl, {
-    method,
-    headers: headers,
-    body: JSON.stringify(data)
-  });
-  if (res.ok) {
-    return res.json();
-  } else {
-    return Promise.reject(`Error: ${res.status}`);
+import apiConfing from "./config.js";
+class ApiClass {
+  constructor() {
+    this._headers = apiConfing.headers;
+    this._baseUrl = apiConfing.baseUrl;
   }
-};
-const _getUserInfo = () => {
-  return _onHttpRequest("users/me", "GET");
-};
-const _getInitialCards = () => {
-  return _onHttpRequest("cards", "GET");
-};
-const getInitInfo = () => {
-  return Promise.all([_getInitialCards(), _getUserInfo()]);
-};
-const setUserInfo = ({name, about}) => {
-  return _onHttpRequest("users/me", "PATCH", {name, about});
-};
-const addNewCard = ({name, link}) => {
-  return _onHttpRequest("cards", "POST", {name, link});
-};
-const onRemoveItem = (id) => {
-  return _onHttpRequest(`cards/${id}`, "DELETE");
-};
-const addItemLike = (id) => {
-  return _onHttpRequest(`cards/likes/${id}`, "PUT");
-};
-const removeItemLike = (id) => {
-  return _onHttpRequest(`cards/likes/${id}`, "DELETE");
-};
-const onUpdateProfilePic = ({avatar}) => {
-  return _onHttpRequest("users/me/avatar", "PATCH", {avatar});
-};
-export default {
-  getInitInfo,
-  setUserInfo,
-  addNewCard,
-  onRemoveItem,
-  addItemLike,
-  removeItemLike,
-  onUpdateProfilePic
-};
+  _onHttpRequest = async (url, method, data) => {
+    const res = await fetch(`${this._baseUrl}${url}`, {
+      method,
+      headers: this._headers,
+      body: JSON.stringify(data)
+    });
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Error: ${res.status}`);
+    }
+  };
+  _getUserInfo = () => {
+    return this._onHttpRequest("users/me", "GET");
+  };
+  _getInitialCards = () => {
+    return this._onHttpRequest("cards", "GET");
+  };
+  getInitInfo = () => {
+    return Promise.all([this._getInitialCards(), this._getUserInfo()]);
+  };
+  setUserInfo = ({name, about}) => {
+    return this._onHttpRequest("users/me", "PATCH", {name, about});
+  };
+  addNewCard = ({name, link}) => {
+    return this._onHttpRequest("cards", "POST", {name, link});
+  };
+  onRemoveItem = (id) => {
+    return this._onHttpRequest(`cards/${id}`, "DELETE");
+  };
+  addItemLike = (id) => {
+    return this._onHttpRequest(`cards/likes/${id}`, "PUT");
+  };
+  removeItemLike = (id) => {
+    return this._onHttpRequest(`cards/likes/${id}`, "DELETE");
+  };
+  onUpdateProfilePic = ({avatar}) => {
+    return this._onHttpRequest("users/me/avatar", "PATCH", {avatar});
+  };
+}
+const Api = new ApiClass();
+export default Api;

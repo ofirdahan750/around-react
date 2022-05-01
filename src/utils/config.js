@@ -5,4 +5,4 @@ const apiConfing = {
     "Content-Type": "application/json"
   }
 };
-export {apiConfing};
+export default apiConfing
