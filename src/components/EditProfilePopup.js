@@ -1,6 +1,6 @@
 import PopupWithForm from "./PopupWithFrom.js";
 import React, {useEffect, useState, useContext} from "react";
-import CurrentUserContext from "../../../contexts/CurrentUserContext.js";
+import CurrentUserContext from "../contexts/CurrentUserContext.js";
 const EditProfilePopup = ({
   onSetVaildMsg,
   isOpen,

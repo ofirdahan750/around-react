@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useState} from "react";
 import CurrentUserContext from "../contexts/CurrentUserContext";
-import ImagePopup from "./Popups/ImagePopup.js";
-import EditProfilePopup from "./Popups/WithForms/EditProfilePopup.js";
-import EditAvatarPopup from "./Popups/WithForms/EditAvatarPopup.js";
-import AddPlacePopup from "./Popups/WithForms/AddPlacePopup.js";
-import ConfirmPopup from "./Popups/WithForms/ConfirmPopup.js";
+import ImagePopup from "../components/ImagePopup.js";
+import EditProfilePopup from "../components/EditProfilePopup.js";
+import EditAvatarPopup from "../components/EditAvatarPopup.js";
+import AddPlacePopup from "../components/AddPlacePopup.js";
+import ConfirmPopup from "../components/ConfirmPopup.js";
 import {
   loadingInitState,
   loadingInitError,
