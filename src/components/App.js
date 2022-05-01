@@ -4,6 +4,7 @@ import ImagePopup from "./Popups/ImagePopup.js";
 import EditProfilePopup from "./Popups/WithForms/EditProfilePopup.js";
 import EditAvatarPopup from "./Popups/WithForms/EditAvatarPopup.js";
 import AddPlacePopup from "./Popups/WithForms/AddPlacePopup.js";
+import ConfirmPopup from "./Popups/WithForms/ConfirmPopup.js";
 import {
   loadingInitState,
   loadingInitError,
@@ -29,6 +30,7 @@ const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isRemovePopupOpen, setisRemovePopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState(loadingInitState.card);
   const [currentUser, setCurrentUser] = useState(loadingInitState.useInfo);
@@ -76,11 +78,14 @@ const App = () => {
 
   useEffect(
     () => {
+      setValidInput(false);
+
       //Set and Remove Popups event
       if (
         isEditProfilePopupOpen ||
         isAddPlacePopupOpen ||
         isEditAvatarPopupOpen ||
+        isRemovePopupOpen ||
         selectedCard.isOpen
       ) {
         document.addEventListener("keydown", handleEscClose);
@@ -92,6 +97,7 @@ const App = () => {
     [
       isEditProfilePopupOpen,
       isAddPlacePopupOpen,
+      isRemovePopupOpen,
       isEditAvatarPopupOpen,
       selectedCard
     ]
@@ -132,12 +138,19 @@ const App = () => {
     if (isLoading) return;
     setSelectedCard({isOpen: true, name, link});
   };
+  const handleRemoveCardClick = (cardId) => {
+    if (isLoading) return;
+    setisRemovePopupOpen(true);
+    formSettingStates.REMOVE_CARD.cardId = cardId;
+    setFormSetting(formSettingStates.REMOVE_CARD);
+  };
   const closeAllPopup = () => {
     onHandleBtnText("Close...", true);
     setTimeout(() => {
       setIsEditProfilePopupOpen(false);
       setIsAddPlacePopupOpen(false);
       setIsEditAvatarPopupOpen(false);
+      setisRemovePopupOpen(false);
       setSelectedCard((prevState) => ({
         ...prevState,
         isOpen: false
@@ -181,13 +194,13 @@ const App = () => {
     }
     // eslint-disable-next-line
   }, []);
-  const handleSubmitRemoveCard = (e, cardId) => {
+  const handleSubmitRemoveCard = (e) => {
     e.preventDefault();
     onHandleBtnText();
-    onRemoveItem(cardId)
+    onRemoveItem(formSetting.cardId)
       .then(() => {
         onHandleBtnText("Place removed successfully!", true);
-        setCards(cards.filter((item) => item._id !== cardId));
+        setCards(cards.filter((item) => item._id !== formSetting.cardId));
         setTimeout(() => {
           closeAllPopup();
         }, 1000);
@@ -264,7 +277,7 @@ const App = () => {
           onCardClick={handleCardClick}
           closeAllPopup={closeAllPopup}
           handleToggleLikedBtn={handleToggleLikedBtn}
-          handleSubmitRemoveCard={handleSubmitRemoveCard}
+          handleRemoveCardClick={handleRemoveCardClick}
         />
         <Footer />
         <AddPlacePopup
@@ -289,6 +302,7 @@ const App = () => {
           handleSubmitEditProfile={handleSubmitEditProfile}
           validMsg={validMsg}
           handleMsgVaild={handleMsgVaild}
+          setValidInput={setValidInput}
         />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
@@ -301,7 +315,13 @@ const App = () => {
           handleMsgVaild={handleMsgVaild}
           handlePopupMouseDown={handlePopupMouseDown}
         />
-
+        <ConfirmPopup
+          handleSubmitRemoveCard={handleSubmitRemoveCard}
+          formSetting={formSetting}
+          isOpen={isRemovePopupOpen}
+          closePopup={closeAllPopup}
+          handlePopupMouseDown={handlePopupMouseDown}
+        />
         <ImagePopup
           selectedCard={selectedCard}
           closeAllPopup={closeAllPopup}

@@ -20,7 +20,6 @@ const EditAvatarPopup = ({
   };
   useEffect(() => {
     handleMsgVaild({val: currInput.current.value});
-    console.log("niww");
   }, [currInput.current.value]);
   return (
     <PopupWithForm

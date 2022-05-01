@@ -10,7 +10,8 @@ const EditProfilePopup = ({
   closeAllPopup,
   validMsg,
   handleSubmitEditProfile,
-  handleMsgVaild
+  handleMsgVaild,
+  setValidInput
 }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -25,7 +26,12 @@ const EditProfilePopup = ({
   }, [currentUser, isOpen]);
 
   useEffect(() => {
-    handleMsgVaild({name, description});
+    if (name === currentUser.name && description === currentUser.about) {
+      setValidInput(false);
+    } //Disable Button if the name and description are the same as before
+    else {
+      handleMsgVaild({name, description});
+    }
   }, [name, description]);
 
   const handleSubmit = (e) => {

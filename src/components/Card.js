@@ -3,7 +3,7 @@ import removeBtn from "../images/places/remove_btn.svg";
 import CurrentUserContext from "../contexts/CurrentUserContext.js";
 const Card = ({
   card: {name, link, likes, owner, _id},
-  handleSubmitRemoveCard,
+  handleRemoveCardClick,
   spinnerGif,
   onCardClick,
   handleToggleLikedBtn
@@ -13,7 +13,10 @@ const Card = ({
   const openImagePopup = () => {
     onCardClick({name, link});
   };
-
+  const handleOpenRemoveCard = (e) => {
+    e.stopPropagation();
+    handleRemoveCardClick(_id);
+  };
   return (
     <li className="places__item">
       <div
@@ -24,10 +27,7 @@ const Card = ({
         {owner._id === currentUser._id && (
           <button
             type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSubmitRemoveCard(e, _id);
-            }}
+            onClick={handleOpenRemoveCard}
             className="places__remove-btn button-modifier"
           >
             <img alt="Remove card button" src={removeBtn} />

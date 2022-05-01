@@ -14,7 +14,7 @@ const Main = ({
   onEditAvatarClick,
   onCardClick,
   handleToggleLikedBtn,
-  handleSubmitRemoveCard
+  handleRemoveCardClick
 }) => {
   const {avatar, about, _id, name} = useContext(CurrentUserContext);
   return (
@@ -78,7 +78,7 @@ const Main = ({
                 setFormSetting={setFormSetting}
                 onCardClick={onCardClick}
                 handleToggleLikedBtn={handleToggleLikedBtn}
-                handleSubmitRemoveCard={handleSubmitRemoveCard}
+                handleRemoveCardClick={handleRemoveCardClick}
               />
             );
           })}
