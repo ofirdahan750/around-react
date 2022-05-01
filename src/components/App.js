@@ -11,7 +11,7 @@ import {
   txtErr,
   errImg
 } from "../utils/constants.js";
-import Api from "../utils/api.js";
+import Api from "../utils/api";
 import Header from "./Header.js";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
