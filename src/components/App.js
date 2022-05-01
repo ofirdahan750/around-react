@@ -3,6 +3,7 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 import ImagePopup from "./Popups/ImagePopup.js";
 import EditProfilePopup from "./Popups/WithForms/EditProfilePopup.js";
 import EditAvatarPopup from "./Popups/WithForms/EditAvatarPopup.js";
+import AddPlacePopup from "./Popups/WithForms/AddPlacePopup.js";
 import {
   loadingInitState,
   loadingInitError,
@@ -22,8 +23,6 @@ import Header from "./Header.js";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
 import {formSettingStates} from "../utils/constants.js";
-import PopupWithForm from "./Popups/WithForms/PopupWithFrom.js";
-import {updateObjInArr} from "../utils/utils";
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [formSetting, setFormSetting] = useState(formSettingStates.INIT);
@@ -33,10 +32,6 @@ const App = () => {
   const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState(loadingInitState.card);
   const [currentUser, setCurrentUser] = useState(loadingInitState.useInfo);
-  const [inputVals, setInputVals] = useState({
-    firstInitVal: "",
-    secInitVal: ""
-  });
   const [isValidInput, setValidInput] = useState(false);
   const [validMsg, setValidMsg] = useState({});
 
@@ -62,10 +57,7 @@ const App = () => {
       [inputVal]: msg
     });
   };
-  const handleInputChange = (inputName, e) => {
-    onChangeInput(inputName, e.target.value);
-    onSetVaildMsg(inputName, e.target.validationMessage);
-  };
+
   useEffect(() => {
     //Init only
     setIsLoading(true);
@@ -82,31 +74,34 @@ const App = () => {
       });
   }, []);
 
-  useEffect(() => {
-    //Set and Remove Popups event
-    if (
-      isEditProfilePopupOpen ||
-      isAddPlacePopupOpen ||
-      isEditAvatarPopupOpen ||
-      selectedCard.isOpen
-    ) {
-      document.addEventListener("keydown", handleEscClose);
-    } else {
-      document.removeEventListener("keydown", handleEscClose);
-    }
-  }, [
-    isEditProfilePopupOpen,
-    isAddPlacePopupOpen,
-    isEditAvatarPopupOpen,
-    selectedCard
-  ]);
+  useEffect(
+    () => {
+      //Set and Remove Popups event
+      if (
+        isEditProfilePopupOpen ||
+        isAddPlacePopupOpen ||
+        isEditAvatarPopupOpen ||
+        selectedCard.isOpen
+      ) {
+        document.addEventListener("keydown", handleEscClose);
+      } else {
+        document.removeEventListener("keydown", handleEscClose);
+      }
+    },
+    // eslint-disable-next-line
+    [
+      isEditProfilePopupOpen,
+      isAddPlacePopupOpen,
+      isEditAvatarPopupOpen,
+      selectedCard
+    ]
+  );
   const handleToggleLikedBtn = (isLiked, id) => {
     if (isLoading) return;
     if (!isLiked) {
       addItemLike(id).then((res) => {
         const newState = [...cards];
         newState.find((item) => item._id === id).likes = res.likes;
-        const updateState = updateObjInArr();
         setCards(newState);
       });
     } else {
@@ -127,13 +122,11 @@ const App = () => {
     if (isLoading) return;
     setIsAddPlacePopupOpen(true);
     setFormSetting(formSettingStates.ADD_ITEM);
-    setInputVals({titleInput: "", urlInput: ""});
   };
   const handleEditAvatarClick = () => {
     if (isLoading) return;
     setIsEditAvatarPopupOpen(true);
     setFormSetting(formSettingStates.EDIT_AVATAR);
-    setInputVals({urlInput: ""});
   };
   const handleCardClick = ({name, link}) => {
     if (isLoading) return;
@@ -186,6 +179,7 @@ const App = () => {
     if (e.key === "Escape") {
       closeAllPopup();
     }
+    // eslint-disable-next-line
   }, []);
   const handleSubmitRemoveCard = (e, cardId) => {
     e.preventDefault();
@@ -194,21 +188,21 @@ const App = () => {
       .then(() => {
         onHandleBtnText("Place removed successfully!", true);
         setCards(cards.filter((item) => item._id !== cardId));
-        // setTimeout(() => {
-        //   closePopup();
-        // }, 1000);
+        setTimeout(() => {
+          closeAllPopup();
+        }, 1000);
       })
 
       .catch((err) => {
         onHandleBtnText("Yes", true, err);
       });
   };
-  const handleSubmitAddItem = (e) => {
+  const handleSubmitAddItem = (e, {imgTitle, imgSrc}) => {
     e.preventDefault();
     onHandleBtnText();
     addNewCard({
-      name: inputVals.titleInput,
-      link: inputVals.urlInput
+      name: imgTitle,
+      link: imgSrc
     })
       .then((res) => {
         onHandleBtnText("Place added successfully!", true);
@@ -255,12 +249,7 @@ const App = () => {
         onHandleBtnText("Save", true, err);
       });
   };
-  const onChangeInput = (changedValName, inputTxtVAL) => {
-    setInputVals((prevState) => ({
-      ...prevState,
-      [changedValName]: inputTxtVAL
-    }));
-  };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__content">
@@ -273,49 +262,23 @@ const App = () => {
           onAddElement={handleAddElementClick}
           onEditAvatarClick={handleEditAvatarClick}
           onCardClick={handleCardClick}
-          setInputVals={setInputVals}
           closeAllPopup={closeAllPopup}
           handleToggleLikedBtn={handleToggleLikedBtn}
           handleSubmitRemoveCard={handleSubmitRemoveCard}
         />
         <Footer />
-        <PopupWithForm
-          handleSubmit={handleSubmitAddItem}
-          handlePopupMouseDown={handlePopupMouseDown}
-          formSetting={formSetting}
+        <AddPlacePopup
+          onSetVaildMsg={onSetVaildMsg}
           isOpen={isAddPlacePopupOpen}
+          formSetting={formSetting}
           isValidInput={isValidInput}
           closeAllPopup={closeAllPopup}
-        >
-          <input
-            className="popup-box__input popup-box__input_order_first-input"
-            onChange={(e) => {
-              handleInputChange("titleInput", e);
-            }}
-            type="text"
-            placeholder="Title"
-            value={inputVals.titleInput || ""}
-            minLength="1"
-            maxLength="30"
-            required
-          />
-          <span className="popup-box__input-error">
-            {validMsg.titleInput || ""}
-          </span>
-          <input
-            className="popup-box__input popup-box__input_order_second-input"
-            type="url"
-            value={inputVals.urlInput || ""}
-            onChange={(e) => {
-              handleInputChange("urlInput", e);
-            }}
-            placeholder="Image link"
-            required
-          />
-          <span className={`popup-box__input-error`}>
-            {validMsg.urlInput || ""}
-          </span>
-        </PopupWithForm>
+          handlePopupMouseDown={handlePopupMouseDown}
+          handleSubmitAddItem={handleSubmitAddItem}
+          validMsg={validMsg}
+          handleMsgVaild={handleMsgVaild}
+        />
+
         <EditProfilePopup
           onSetVaildMsg={onSetVaildMsg}
           isOpen={isEditProfilePopupOpen}

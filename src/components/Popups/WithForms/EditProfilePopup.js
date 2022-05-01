@@ -27,6 +27,7 @@ const EditProfilePopup = ({
   useEffect(() => {
     handleMsgVaild({name, description});
   }, [name, description]);
+
   const handleSubmit = (e) => {
     handleSubmitEditProfile(e, {name, description});
   };
@@ -38,7 +39,6 @@ const EditProfilePopup = ({
       isValidInput={isValidInput}
       closeAllPopup={closeAllPopup}
       handleSubmit={handleSubmit}
-      inputVals={{name, description}}
     >
       <input
         className="popup-box__input popup-box__input_order_first-input"

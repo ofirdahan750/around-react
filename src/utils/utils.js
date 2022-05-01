@@ -16,6 +16,5 @@ function getRandomString(length = getRandomInt()) {
 function getRandomInt(min = 50, max = 150) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-export function updateObjInArr(arr, id) {}
 
 export {getRandomString};
