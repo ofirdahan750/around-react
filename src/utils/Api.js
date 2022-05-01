@@ -1,5 +1,5 @@
 import apiConfing from "./config.js";
-class ApiClass {
+class Api {
   constructor() {
     this._headers = apiConfing.headers;
     this._baseUrl = apiConfing.baseUrl;
@@ -44,5 +44,5 @@ class ApiClass {
     return this._onHttpRequest("users/me/avatar", "PATCH", {avatar});
   };
 }
-const Api = new ApiClass();
-export default Api;
+const api = new Api();
+export default api;

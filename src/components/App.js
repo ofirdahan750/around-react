@@ -11,7 +11,7 @@ import {
   txtErr,
   errImg
 } from "../utils/constants.js";
-import Api from "../utils/api.js";
+import api from "../utils/api.js";
 import Header from "./Header.js";
 import Main from "./Main.js";
 import Footer from "./Footer.js";
@@ -55,7 +55,7 @@ const App = () => {
   useEffect(() => {
     //Init only
     setIsLoading(true);
-    Api.getInitInfo()
+    api.getInitInfo()
       .then(([cardItemsArr, userInfoRes]) => {
         setIsLoading(false);
         setCards(cardItemsArr);
@@ -97,13 +97,13 @@ const App = () => {
   const handleToggleLikedBtn = (isLiked, id) => {
     if (isLoading) return;
     if (!isLiked) {
-      Api.addItemLike(id).then((res) => {
+      api.addItemLike(id).then((res) => {
         const newState = [...cards];
         newState.find((item) => item._id === id).likes = res.likes;
         setCards(newState);
       });
     } else {
-      Api.removeItemLike(id).then((res) => {
+      api.removeItemLike(id).then((res) => {
         const newState = [...cards];
         newState.find((item) => item._id === id).likes = res.likes;
         setCards(newState);
@@ -189,7 +189,7 @@ const App = () => {
   const handleSubmitRemoveCard = (e) => {
     e.preventDefault();
     onHandleBtnText();
-    Api.onRemoveItem(formSetting.cardId)
+    api.onRemoveItem(formSetting.cardId)
       .then(() => {
         onHandleBtnText("Place removed successfully!", true);
         setCards(cards.filter((item) => item._id !== formSetting.cardId));
@@ -205,7 +205,7 @@ const App = () => {
   const handleSubmitAddItem = (e, {imgTitle, imgSrc}) => {
     e.preventDefault();
     onHandleBtnText();
-    Api.addNewCard({
+    api.addNewCard({
       name: imgTitle,
       link: imgSrc
     })
@@ -223,7 +223,7 @@ const App = () => {
   const handleSubmitEditProfile = (e, {name, description}) => {
     e.preventDefault();
     onHandleBtnText();
-    Api.setUserInfo({name, about: description})
+    api.setUserInfo({name, about: description})
       .then((res) => {
         onHandleBtnText("Profile edited successfully!", true);
         setCurrentUser(res);
@@ -239,7 +239,7 @@ const App = () => {
   const handleSubmitChangeProfilePic = (e, avatarInput) => {
     e.preventDefault();
     onHandleBtnText();
-    Api.onUpdateProfilePic({avatar: avatarInput})
+    api.onUpdateProfilePic({avatar: avatarInput})
       .then(() => {
         onHandleBtnText("Profile Picture modified successfully!", true);
         setCurrentUser((prevState) => ({
