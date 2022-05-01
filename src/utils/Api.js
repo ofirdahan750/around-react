@@ -44,5 +44,4 @@ class Api {
     return this._onHttpRequest("users/me/avatar", "PATCH", {avatar});
   };
 }
-const api = new Api();
-export default api;
+export default Api;
