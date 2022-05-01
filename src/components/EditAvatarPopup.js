@@ -1,4 +1,4 @@
-import PopupWithForm from "./PopupWithFrom.js";
+import PopupWithForm from "./PopupWithForm.js";
 import React, {useEffect, useRef} from "react";
 const EditAvatarPopup = ({
   handleSubmitChangeProfilePic,

@@ -1,4 +1,4 @@
-import PopupWithForm from "./PopupWithFrom.js";
+import PopupWithForm from "./PopupWithForm.js";
 import React from "react";
 const ConfirmPopup = ({
   handleSubmitRemoveCard,

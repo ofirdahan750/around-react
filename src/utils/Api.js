@@ -1,4 +1,4 @@
-import {apiConfing} from "../utils/config.js";
+import {apiConfing} from "./config.js";
 const {baseUrl, headers} = apiConfing;
 
 const _onHttpRequest = async (url, method, data) => {
