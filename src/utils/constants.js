@@ -59,6 +59,12 @@ const formSettingStates = {
     btnSetting: {txt: "Yes", isDisable: false},
     cardId: ""
   },
+  POPUP_ERROR: {
+    name: "POPUP_ERROR",
+    type: "error",
+    heading: txtErr,
+    btnSetting: {txt: "OK", isDisable: false}
+  },
   POPUP_IMAGE: {
     name: "POPUP_IMAGE",
     type: "img",

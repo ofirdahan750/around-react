@@ -1,7 +1,8 @@
+import React from "react";
 export const Footer = () => {
   return (
     <footer className="footer">
-      <p className="footer__text">2021 Around The U.S.</p>
+      <p className="footer__text">{new Date().getFullYear()} Around The U.S.</p>
     </footer>
   );
 };

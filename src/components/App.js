@@ -5,6 +5,7 @@ import EditProfilePopup from "../components/EditProfilePopup.js";
 import EditAvatarPopup from "../components/EditAvatarPopup.js";
 import AddPlacePopup from "../components/AddPlacePopup.js";
 import ConfirmPopup from "../components/ConfirmPopup.js";
+import ErrorPopup from "../components/ErrorPopup.js";
 import {
   loadingInitState,
   loadingInitError,
@@ -22,7 +23,8 @@ const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isRemovePopupOpen, setisRemovePopupOpen] = useState(false);
+  const [isRemovePopupOpen, setIsRemovePopupOpen] = useState(false);
+  const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState(loadingInitState.card);
   const [currentUser, setCurrentUser] = useState(loadingInitState.useInfo);
@@ -65,6 +67,7 @@ const App = () => {
         console.log("error:", error);
         setCards(loadingInitError.card);
         setCurrentUser(loadingInitError.useInfo);
+        handleErrorPopupOpen();
       });
   }, []);
 
@@ -97,17 +100,29 @@ const App = () => {
   const handleToggleLikedBtn = (isLiked, id) => {
     if (isLoading) return;
     if (!isLiked) {
-      api.addItemLike(id).then((res) => {
-        const newState = [...cards];
-        newState.find((item) => item._id === id).likes = res.likes;
-        setCards(newState);
-      });
+      api
+        .addItemLike(id)
+        .then((res) => {
+          const newState = [...cards];
+          newState.find((item) => item._id === id).likes = res.likes;
+          setCards(newState);
+        })
+        .catch((err) => {
+          console.log(`Error: ${err}`);
+          handleErrorPopupOpen();
+        });
     } else {
-      api.removeItemLike(id).then((res) => {
-        const newState = [...cards];
-        newState.find((item) => item._id === id).likes = res.likes;
-        setCards(newState);
-      });
+      api
+        .removeItemLike(id)
+        .then((res) => {
+          const newState = [...cards];
+          newState.find((item) => item._id === id).likes = res.likes;
+          setCards(newState);
+        })
+        .catch((err) => {
+          console.log(`Error: ${err}`);
+          handleErrorPopupOpen();
+        });
     }
   };
   const handleEditProfileClick = () => {
@@ -132,9 +147,13 @@ const App = () => {
   };
   const handleRemoveCardClick = (cardId) => {
     if (isLoading) return;
-    setisRemovePopupOpen(true);
+    setIsRemovePopupOpen(true);
     formSettingStates.REMOVE_CARD.cardId = cardId;
     setFormSetting(formSettingStates.REMOVE_CARD);
+  };
+  const handleErrorPopupOpen = () => {
+    setIsErrorPopupOpen(true);
+    setFormSetting(formSettingStates.POPUP_ERROR);
   };
   const closeAllPopup = () => {
     onHandleBtnText("Close...", true);
@@ -142,13 +161,15 @@ const App = () => {
       setIsEditProfilePopupOpen(false);
       setIsAddPlacePopupOpen(false);
       setIsEditAvatarPopupOpen(false);
-      setisRemovePopupOpen(false);
+      setIsRemovePopupOpen(false);
+      setIsErrorPopupOpen(false);
       setSelectedCard((prevState) => ({
         ...prevState,
         isOpen: false
       }));
     }, 1);
   };
+
   const onHandleBtnText = (btnTxt = "Saving...", isDisable = true, error) => {
     if (error) {
       console.log(`Error: ${error}`);
@@ -198,7 +219,6 @@ const App = () => {
           closeAllPopup();
         }, 1000);
       })
-
       .catch((err) => {
         onHandleBtnText("Yes", true, err);
       });
@@ -258,7 +278,6 @@ const App = () => {
         onHandleBtnText("Save", true, err);
       });
   };
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__content">
@@ -315,6 +334,12 @@ const App = () => {
           handleSubmitRemoveCard={handleSubmitRemoveCard}
           formSetting={formSetting}
           isOpen={isRemovePopupOpen}
+          closePopup={closeAllPopup}
+          handlePopupMouseDown={handlePopupMouseDown}
+        />
+        <ErrorPopup
+          formSetting={formSetting}
+          isOpen={isErrorPopupOpen}
           closePopup={closeAllPopup}
           handlePopupMouseDown={handlePopupMouseDown}
         />
