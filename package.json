@@ -20,7 +20,7 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "push": "git add . && git commit -m \"add script fullpush\" && git push",
+    "push": "git add . && git commit -m \"Change hreat beat animation\" && git push",
     "fullpush": "npm run push && npm run deploy"
   },
   "eslintConfig": {

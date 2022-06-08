@@ -2,7 +2,7 @@
   content: url("../../../images/places/like_btn_svg/like_btn_unactive.svg");
 }
 .places__like-btn:hover {
-  animation: pulsate-bck 0.8s ease-in-out infinite both;
+  animation: heartbeat 0.5s ease-in-out infinite both;
 }
 
 .places__like-btn:hover::after {
